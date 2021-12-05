@@ -1,0 +1,4 @@
+name: Rpg Libary
+version: '${project.version}'
+main: me.refluxo.rpglibary.RpgLibary
+api-version: 1.18
