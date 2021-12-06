@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: de.dytanic.cloudnet:cloudnet-common:3.4.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/de/dytanic/cloudnet/cloudnet-common/3.4.0-SNAPSHOT/cloudnet-common-3.4.0-20210722.180741-283.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/de/dytanic/cloudnet/cloudnet-common/3.4.0-SNAPSHOT/cloudnet-common-3.4.0-20210722.180741-283-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/de/dytanic/cloudnet/cloudnet-common/3.4.0-SNAPSHOT/cloudnet-common-3.4.0-20210722.180741-283-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

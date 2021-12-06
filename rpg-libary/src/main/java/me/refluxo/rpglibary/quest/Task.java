@@ -14,8 +14,4 @@ public class Task<T extends Event> {
         return (T) task;
     }
 
-    public static void init() {
-
-    }
-
 }

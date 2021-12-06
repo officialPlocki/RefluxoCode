@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: de.dytanic.cloudnet:cloudnet-driver:3.4.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/de/dytanic/cloudnet/cloudnet-driver/3.4.0-SNAPSHOT/cloudnet-driver-3.4.0-20210722.180741-282.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/de/dytanic/cloudnet/cloudnet-driver/3.4.0-SNAPSHOT/cloudnet-driver-3.4.0-20210722.180741-282-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/de/dytanic/cloudnet/cloudnet-driver/3.4.0-SNAPSHOT/cloudnet-driver-3.4.0-20210722.180741-282-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
