@@ -11,4 +11,8 @@ public interface IQuest<T extends Event> {
 
     Player getPlayer();
 
+    String questName();
+
+    int questID();
+
 }

@@ -22,4 +22,14 @@ public class TestQuest implements IQuest<PlayerJoinEvent> {
         return getTask().task().getPlayer();
     }
 
+    @Override
+    public String questName() {
+        return "TestQuest";
+    }
+
+    @Override
+    public int questID() {
+        return 1;
+    }
+
 }
