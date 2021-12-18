@@ -20,7 +20,7 @@ public final class ServerLibary extends JavaPlugin {
 
     private static Plugin plugin;
 
-    public static String prefix = "";
+    public static String prefix = "§b§lRef§f§lluxo§c§l.me §8» §7";
 
     @Override
     public void onEnable() {

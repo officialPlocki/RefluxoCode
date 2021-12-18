@@ -5,11 +5,17 @@ import com.velocitypowered.api.event.Event;
 import com.velocitypowered.api.event.player.LoginEvent;
 import me.refluxo.bungee.util.OnlineTime;
 
+import java.sql.SQLException;
+
 public class JoinEvent implements Event {
 
     @Inject
     public void onJoin(LoginEvent event) {
-        new OnlineTime(event.player());
+        try {
+            new OnlineTime(event.player()).checkPlayer();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 }
