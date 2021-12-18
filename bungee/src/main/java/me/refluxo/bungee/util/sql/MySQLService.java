@@ -1,4 +1,4 @@
-package me.refluxo.serverlibary.util.sql;
+package me.refluxo.bungee.util.sql;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

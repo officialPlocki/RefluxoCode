@@ -1,6 +1,4 @@
-package me.refluxo.serverlibary.util.tablist;
-
-import net.minecraft.EnumChatFormat;
+package me.refluxo.serverlibary.util.score.rank;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,8 +11,9 @@ public class RankManager {
         return ranks.getOrDefault(rankName, null);
     }
 
-    public void registerRank(String rankName, String prefix, String suffix, int tablistHeight, EnumChatFormat color) {
+    public void registerRank(String rankName, String prefix, String suffix) {
         ranks.put(rankName, new Rank() {
+
             @Override
             public String getPrefix() {
                 return prefix;
@@ -25,15 +24,6 @@ public class RankManager {
                 return suffix;
             }
 
-            @Override
-            public int getTablistHeight() {
-                return tablistHeight;
-            }
-
-            @Override
-            public EnumChatFormat getColor() {
-                return color;
-            }
         });
     }
 

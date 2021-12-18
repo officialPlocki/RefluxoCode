@@ -14,7 +14,7 @@
     <bytecodeTargetLevel>
       <module name="bungee" target="11" />
       <module name="rpg-libary" target="1.8" />
-      <module name="server-libary" target="1.8" />
+      <module name="server-libary" target="16" />
     </bytecodeTargetLevel>
   </component>
 </project>

@@ -1,58 +1,81 @@
 package me.refluxo.serverlibary.util.player;
 
+import com.google.common.annotations.Beta;
 import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.ext.bridge.player.IPlayerManager;
 import me.refluxo.serverlibary.util.cloud.BungeeCord;
-import me.refluxo.serverlibary.util.tablist.Rank;
-import me.refluxo.serverlibary.util.tablist.RankManager;
+import me.refluxo.serverlibary.util.score.rank.Rank;
+import me.refluxo.serverlibary.util.score.rank.RankManager;
+import me.refluxo.serverlibary.util.sql.MySQLService;
+import me.refluxo.serverlibary.util.sql.log.MySQLLog;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Location;
+import org.bukkit.Sound;
+import org.bukkit.craftbukkit.libs.org.apache.commons.lang3.time.DurationFormatUtils;
 import org.bukkit.entity.Player;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 public class PlayerAPI {
 
+    public enum MessageType {
+        NORMAL,
+        WARNING,
+        ERROR,
+        ANNOUNCEMENT
+    }
     private final Player player;
 
     public PlayerAPI(Player player) {
         this.player = player;
     }
 
-    @Deprecated
+    @Beta
     public void sendToServer(String server) {
         new BungeeCord().sendPlayer(player, server);
     }
 
-    @Deprecated
+    @Beta
     public void kickPlayerFromNetwork(String message) {
         new BungeeCord().kickPlayer(player, message);
     }
 
+    @Beta
     public void kickPlayerFromServer(String message) {
         player.kickPlayer(message);
     }
 
-    @Deprecated
+    public boolean hasPermission(String permission) {
+        return player.hasPermission(permission);
+    }
+
     public void log(String messageToLog) {
-        //mysql player log
+        new MySQLLog().log(player, messageToLog);
+    }
+
+    public void sendMessage(MessageType type, ChatMessageType position, String msg) {
+        String typemsg;
+        if(type == MessageType.ANNOUNCEMENT) {
+            typemsg = "§c§lANNOUNCEMENT §8» §7";
+        } else if(type == MessageType.ERROR) {
+            typemsg = "§c§lFEHLER §8» §7";
+        } else if(type == MessageType.WARNING) {
+            typemsg = "§e§lWARNUNG §8» §7";
+        } else {
+            typemsg = "";
+        }
+        if(position.equals(ChatMessageType.ACTION_BAR)) {
+            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 10, 10);
+        }
+        player.spigot().sendMessage(position, TextComponent.fromLegacyText(typemsg + msg));
     }
 
     public APIPlayer getAPIPlayer() {
         return new APIPlayer() {
-            @Override
-            public String getPrefix() {
-                return getRank().getPrefix();
-            }
-
-            @Override
-            public String getSuffix() {
-                return getRank().getSuffix();
-            }
-
-            @Override
-            public int getTablistHeight() {
-                return getRank().getTablistHeight();
-            }
 
             @Override
             public Rank getRank() {
@@ -82,6 +105,11 @@ public class PlayerAPI {
             }
 
             @Override
+            public String getName() {
+                return player.getName();
+            }
+
+            @Override
             public String getCurrentServer() {
                 if(player.isOnline()) {
                     return Objects.requireNonNull(CloudNetDriver.getInstance().getServicesRegistry().getFirstService(IPlayerManager.class).getOnlinePlayer(player.getUniqueId())).getNetworkConnectionInfo().getNetworkService().getTaskName();
@@ -92,7 +120,16 @@ public class PlayerAPI {
 
             @Override
             public String getOnlineTime() {
-                return null;
+                long time = 0;
+                ResultSet rs = new MySQLService().getResult("SELECT * FROM onlineTime WHERE uuid = '" + player.getUniqueId() + "';");
+                try {
+                    if(rs.next()) {
+                        time = rs.getLong("t");
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                return DurationFormatUtils.formatDuration(TimeUnit.SECONDS.toMillis(time), "HH:mm:ss");
             }
 
             @Override

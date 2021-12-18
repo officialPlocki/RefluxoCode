@@ -1,11 +1,18 @@
 package me.refluxo.serverlibary;
 
+import me.refluxo.serverlibary.listeners.ChatEvent;
+import me.refluxo.serverlibary.listeners.JoinEvent;
+import me.refluxo.serverlibary.listeners.QuitEvent;
 import me.refluxo.serverlibary.util.files.FileBuilder;
 import me.refluxo.serverlibary.util.files.YamlConfiguration;
+import me.refluxo.serverlibary.util.player.bad.BadWords;
 import me.refluxo.serverlibary.util.sql.MySQLService;
+import me.refluxo.serverlibary.util.score.rank.RankManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import xyz.plocki.asyncthread.AsyncThread;
 
 import java.sql.SQLException;
 
@@ -13,9 +20,12 @@ public final class ServerLibary extends JavaPlugin {
 
     private static Plugin plugin;
 
+    public static String prefix = "";
+
     @Override
     public void onEnable() {
         // Plugin startup logic
+        PluginManager pm = Bukkit.getPluginManager();
         FileBuilder fb = new FileBuilder("config/libary/config.yml");
         YamlConfiguration yml = fb.getYaml();
         Bukkit.getConsoleSender().sendMessage("Checking config...");
@@ -42,19 +52,37 @@ public final class ServerLibary extends JavaPlugin {
             Bukkit.getConsoleSender().sendMessage("Can't connect to MySQL, is it offline (or is the config not configured)? Disabling plugin...");
             Bukkit.getPluginManager().disablePlugin(this);
         }
+        new MySQLService().executeUpdate("CREATE TABLE IF NOT EXISTS log(i TEXT, log TEXT, t TEXT);");
         plugin = this;
         Bukkit.getConsoleSender().sendMessage("Registering commands...");
         //commands
 
 
 
-
         Bukkit.getConsoleSender().sendMessage("Commands registered. Trying to load listeners...");
         //listeners
+        pm.registerEvents(new JoinEvent(), this);
+        pm.registerEvents(new ChatEvent(), this);
+        pm.registerEvents(new QuitEvent(), this);
 
+        Bukkit.getConsoleSender().sendMessage("Listeners loaded. Registering outgoing messaging channel...");
+        Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+        new AsyncThread(BadWords::init).runAsync();
 
-        Bukkit.getConsoleSender().sendMessage("Listeners loaded.");
-        Bukkit.getConsoleSender().sendMessage("Libary loaded. JettPack can now load plugins that depends on this Libary.");
+        RankManager rm = new RankManager();
+        rm.registerRank("administrator", "§4Admin §8✰ §7", " §c§lTeam");
+        rm.registerRank("developer", "§bDev §8✰ §7", " §c§lTeam");
+        rm.registerRank("content", "§3Content §8✰ §7", " §c§lTeam");
+        rm.registerRank("designer", "§1Designer §8✰ §7", " §c§lTeam");
+        rm.registerRank("moderator", "§cMod §8✰ §7", " §c§lTeam");
+        rm.registerRank("builder", "§aBuilder §8✰ §7", " §c§lTeam");
+        rm.registerRank("supporter", "§eSup §8✰ §7", " §c§lTeam");
+        rm.registerRank("freund", "§bFreund §8✰ §7", "");
+        rm.registerRank("promoter", "§dPromo §8✰ §7", "");
+        rm.registerRank("premium", "§6Prem §8✰ §7", "");
+        rm.registerRank("spieler", "§7Spieler §8✰ §7", "");
+
+        Bukkit.getConsoleSender().sendMessage("Channel loaded. JettPack can now load plugins that depends on this Libary.");
     }
 
     @Override

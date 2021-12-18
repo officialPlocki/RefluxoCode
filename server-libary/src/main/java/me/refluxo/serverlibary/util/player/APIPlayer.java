@@ -1,18 +1,14 @@
 package me.refluxo.serverlibary.util.player;
 
-import me.refluxo.serverlibary.util.tablist.Rank;
+import me.refluxo.serverlibary.util.score.rank.Rank;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 public interface APIPlayer {
 
-    String getPrefix();
-
-    String getSuffix();
-
-    int getTablistHeight();
-
     Rank getRank();
+
+    String getName();
 
     String getCurrentServer();
 
