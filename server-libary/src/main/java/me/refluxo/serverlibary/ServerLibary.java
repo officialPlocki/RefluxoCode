@@ -6,6 +6,7 @@ import me.refluxo.serverlibary.listeners.QuitEvent;
 import me.refluxo.serverlibary.util.files.FileBuilder;
 import me.refluxo.serverlibary.util.files.YamlConfiguration;
 import me.refluxo.serverlibary.util.player.bad.BadWords;
+import me.refluxo.serverlibary.util.score.scoreboard.ScoreboardAPI;
 import me.refluxo.serverlibary.util.sql.MySQLService;
 import me.refluxo.serverlibary.util.score.rank.RankManager;
 import org.bukkit.Bukkit;
@@ -68,6 +69,7 @@ public final class ServerLibary extends JavaPlugin {
         Bukkit.getConsoleSender().sendMessage("Listeners loaded. Registering outgoing messaging channel...");
         Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         new AsyncThread(BadWords::init).runAsync();
+        ScoreboardAPI.init();
 
         RankManager rm = new RankManager();
         rm.registerRank("administrator", "§4Admin §8✰ §7", " §c§lTeam");

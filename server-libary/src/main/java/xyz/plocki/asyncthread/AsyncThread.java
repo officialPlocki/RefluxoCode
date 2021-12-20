@@ -24,7 +24,7 @@ public class AsyncThread {
     }
 
     public ScheduledFuture<?> scheduleAsyncTask(long initDelay, long milli) {
-        return ses.scheduleAtFixedRate(this.run, initDelay, milli, TimeUnit.MILLISECONDS);
+        return ses.scheduleAtFixedRate(this.run, initDelay, 1000*milli, TimeUnit.MILLISECONDS);
     }
 
 }

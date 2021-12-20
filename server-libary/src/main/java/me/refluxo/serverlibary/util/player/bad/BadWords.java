@@ -22,7 +22,10 @@ public class BadWords {
         badwords.add("missgeburt");
         badwords.add("ich töte dein");
         badwords.add("fuck");
-        badwords.add("fuck you");
+        badwords.add("fick");
+        badwords.add("dick");
+        badwords.add("penis");
+        badwords.add("fuck");
         badwords.add("pornhub");
         badwords.add("kacke");
         badwords.add("scheiße");

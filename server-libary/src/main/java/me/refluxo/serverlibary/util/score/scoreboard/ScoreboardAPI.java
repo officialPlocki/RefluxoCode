@@ -1,6 +1,5 @@
 package me.refluxo.serverlibary.util.score.scoreboard;
 
-import me.refluxo.serverlibary.util.player.APIPlayer;
 import me.refluxo.serverlibary.util.player.PlayerAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.scoreboard.Scoreboard;

@@ -10,9 +10,9 @@ import me.refluxo.serverlibary.util.sql.MySQLService;
 import me.refluxo.serverlibary.util.sql.log.MySQLLog;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.apache.commons.lang.time.DurationFormatUtils;
 import org.bukkit.Location;
 import org.bukkit.Sound;
-import org.bukkit.craftbukkit.libs.org.apache.commons.lang3.time.DurationFormatUtils;
 import org.bukkit.entity.Player;
 
 import java.sql.ResultSet;
