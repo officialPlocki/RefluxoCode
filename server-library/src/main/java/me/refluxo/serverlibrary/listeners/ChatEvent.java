@@ -14,6 +14,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import xyz.plocki.asyncthread.AsyncThread;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
@@ -40,6 +41,20 @@ public class ChatEvent implements Listener {
                 }
             }
             lastMessage.put(event.getPlayer(), event.getMessage());
+
+            String finalMsg1 = msg;
+            BadWords.badWords.forEach(word -> {
+                String[] splitMsg = finalMsg1.split("\\s+");
+                Arrays.stream(splitMsg).toList().forEach(msgWord -> {
+                    if(new StringSimilarityServiceImpl(new JaroWinklerStrategy()).score(word, msgWord) >= 0.80) {
+                        event.setCancelled(true);
+                        playerAPI.sendMessage(PlayerAPI.MessageType.ERROR, ChatMessageType.ACTION_BAR, ServerLibrary.prefix+"Bitte achte auf dein Chatverhalten (Wortwahl).");
+                    }
+                });
+            });
+            if(event.isCancelled()) {
+                return;
+            }
             //anti caps
             if(msg.length() >= 10) {
                 int up = 0;
@@ -68,6 +83,9 @@ public class ChatEvent implements Listener {
             if(msg.toLowerCase().contains("pride") || msg.toLowerCase().contains("lgbt") || msg.toLowerCase().contains("gay") || msg.toLowerCase().contains("schwul") || msg.toLowerCase().contains("lesbe") || msg.toLowerCase().contains("lesbisch") || msg.toLowerCase().contains("bisexuel") || msg.toLowerCase().contains("trans*") || msg.toLowerCase().contains("transgender")) {
                 playerAPI.sendMessage(PlayerAPI.MessageType.WARNING, ChatMessageType.CHAT , ServerLibrary.prefix + "Deine Nachricht wurde zur Überprüfung gespeichert um sicherzustellen, dass diese in keinem negativen Kontext benutzt wurde.");
                 new PlayerManager().getPlayer(event.getPlayer()).log("Wrote \"" + msg + "\" in the chat.");
+            }
+            if(event.isCancelled()) {
+                return;
             }
         } else {
             event.setCancelled(true);

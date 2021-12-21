@@ -5,38 +5,38 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class BadWords {
 
-    private static ArrayList<String> badwords;
+    public static ArrayList<String> badWords;
 
     public static void init() {
-        badwords = new ArrayList<>();
-        badwords.add("arsch");
-        badwords.add("arschloch");
-        badwords.add("hure");
-        badwords.add("hurensohn");
-        badwords.add("hurentochter");
-        badwords.add("schlampe");
-        badwords.add("nude");
-        badwords.add("idiot");
-        badwords.add("vollidiot");
-        badwords.add("itiot");
-        badwords.add("missgeburt");
-        badwords.add("ich töte dein");
-        badwords.add("fuck");
-        badwords.add("fick");
-        badwords.add("dick");
-        badwords.add("penis");
-        badwords.add("fuck");
-        badwords.add("pornhub");
-        badwords.add("kacke");
-        badwords.add("scheiße");
-        badwords.add("porn");
-        badwords.add("beschissen");
-        badwords.add("download server");
+        badWords = new ArrayList<>();
+        badWords.add("arsch");
+        badWords.add("arschloch");
+        badWords.add("hure");
+        badWords.add("hurensohn");
+        badWords.add("hurentochter");
+        badWords.add("schlampe");
+        badWords.add("nude");
+        badWords.add("idiot");
+        badWords.add("vollidiot");
+        badWords.add("itiot");
+        badWords.add("missgeburt");
+        badWords.add("ich töte dein");
+        badWords.add("fuck");
+        badWords.add("fick");
+        badWords.add("dick");
+        badWords.add("penis");
+        badWords.add("fuck");
+        badWords.add("pornhub");
+        badWords.add("kacke");
+        badWords.add("scheiße");
+        badWords.add("porn");
+        badWords.add("beschissen");
+        badWords.add("download server");
     }
 
     public static boolean contains(String string) {
         AtomicBoolean b = new AtomicBoolean(false);
-        badwords.forEach(s -> {
+        badWords.forEach(s -> {
             if(string.toLowerCase().contains(s.toLowerCase())) {
                 b.set(true);
             }
