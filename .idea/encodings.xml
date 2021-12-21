@@ -3,9 +3,9 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/bungee/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/bungee/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/rpg-libary/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/rpg-libary/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/server-libary/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/server-libary/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rpg-library/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rpg-library/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/server-library/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/server-library/src/main/resources" charset="UTF-8" />
   </component>
 </project>

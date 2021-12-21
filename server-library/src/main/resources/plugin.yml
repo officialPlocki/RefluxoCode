@@ -1,0 +1,8 @@
+name: Library
+version: '${project.version}'
+main: me.refluxo.serverlibrary.ServerLibrary
+api-version: 1.13
+load: STARTUP
+website: https://refluxo.software
+author: Refluxo Development
+prefix: Library

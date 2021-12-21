@@ -2,10 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/RefluxoBot/RefluxoBot.iml" filepath="$PROJECT_DIR$/RefluxoBot/RefluxoBot.iml" />
       <module fileurl="file://$PROJECT_DIR$/bungee/bungee.iml" filepath="$PROJECT_DIR$/bungee/bungee.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/code.iml" filepath="$PROJECT_DIR$/.idea/code.iml" />
-      <module fileurl="file://$PROJECT_DIR$/rpg-libary/rpg-libary.iml" filepath="$PROJECT_DIR$/rpg-libary/rpg-libary.iml" />
-      <module fileurl="file://$PROJECT_DIR$/server-libary/server-libary.iml" filepath="$PROJECT_DIR$/server-libary/server-libary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rpg-libary/rpg-library.iml" filepath="$PROJECT_DIR$/rpg-libary/rpg-library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/server-libary/server-library.iml" filepath="$PROJECT_DIR$/server-libary/server-library.iml" />
     </modules>
   </component>
 </project>

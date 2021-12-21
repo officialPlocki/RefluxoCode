@@ -1,8 +1,0 @@
-name: Libary
-version: '${project.version}'
-main: me.refluxo.serverlibary.ServerLibary
-api-version: 1.13
-load: STARTUP
-website: https://refluxo.software
-author: Refluxo Development
-prefix: Libary

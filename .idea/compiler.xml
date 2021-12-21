@@ -6,15 +6,17 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="rpg-libary" />
-        <module name="server-libary" />
+        <module name="RefluxoBot" />
+        <module name="server-library" />
+        <module name="rpg-library" />
         <module name="bungee" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="bungee" target="11" />
-      <module name="rpg-libary" target="1.8" />
-      <module name="server-libary" target="16" />
+      <module name="RefluxoBot" target="17" />
+      <module name="rpg-library" target="1.8" />
+      <module name="server-library" target="16" />
     </bytecodeTargetLevel>
   </component>
 </project>

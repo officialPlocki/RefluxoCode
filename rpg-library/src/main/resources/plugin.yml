@@ -1,0 +1,6 @@
+name: RpgLibrary
+version: '${project.version}'
+main: me.refluxo.rpglibrary.RpgLibrary
+api-version: 1.13
+depend:
+  - Library
