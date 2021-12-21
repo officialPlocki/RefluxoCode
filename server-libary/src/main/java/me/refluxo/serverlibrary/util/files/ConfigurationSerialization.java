@@ -11,8 +11,15 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public record ConfigurationSerialization(
-        Class<? extends ConfigurationSerializable> clazz) {
+public class ConfigurationSerialization {
+
+    private final Class<? extends ConfigurationSerializable> clazz;
+
+    public ConfigurationSerialization(Class<? extends ConfigurationSerializable> clazz) {
+        this.clazz = clazz;
+    }
+
+
     public static final String SERIALIZED_TYPE_KEY = "==";
     @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     private static final Map<String, Class<? extends ConfigurationSerializable>> aliases = new HashMap<>();

@@ -20,7 +20,13 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("all")
-public record PlayerAPI(Player player) {
+public class PlayerAPI {
+
+    private Player player;
+
+    public PlayerAPI(Player player) {
+        this.player = player;
+    }
 
     public enum MessageType {
         NORMAL,
