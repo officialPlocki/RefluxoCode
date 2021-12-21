@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>me.refluxo</groupId>
-    <artifactId>rpg-library</artifactId>
+    <artifactId>rpg-libary</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>Rpg Library</name>
+    <name>Rpg Libary</name>
 
     <properties>
         <java.version>1.8</java.version>
@@ -72,7 +72,7 @@
         </dependency>
         <dependency>
             <groupId>me.refluxo</groupId>
-            <artifactId>server-library</artifactId>
+            <artifactId>server-libary</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>

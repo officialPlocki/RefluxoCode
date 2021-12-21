@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>me.refluxo</groupId>
-    <artifactId>server-library</artifactId>
+    <artifactId>server-libary</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>Server Library</name>
+    <name>Server Libary</name>
 
     <properties>
         <java.version>1.8</java.version>
@@ -136,11 +136,6 @@
             <artifactId>authlib</artifactId>
             <version>1.5.25</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.google.common</groupId>
-            <artifactId>google-collect</artifactId>
-            <version>1.0-rc1</version>
         </dependency>
     </dependencies>
 </project>
