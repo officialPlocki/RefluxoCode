@@ -3,7 +3,6 @@
     <output-path>$PROJECT_DIR$/out/artifacts/RpgLibrary</output-path>
     <root id="archive" name="RpgLibrary.jar">
       <element id="module-output" name="rpg-libary" />
-      <element id="library" level="project" name="Maven: org.jetbrains:annotations:22.0.0" />
     </root>
   </artifact>
 </component>
