@@ -5,6 +5,7 @@ import me.refluxo.serverlibrary.util.player.PlayerAPI;
 import me.refluxo.serverlibrary.util.player.PlayerManager;
 import me.refluxo.serverlibrary.util.player.bad.BadWords;
 import net.md_5.bungee.api.ChatMessageType;
+import net.ricecode.similarity.DiceCoefficientStrategy;
 import net.ricecode.similarity.JaroWinklerStrategy;
 import net.ricecode.similarity.SimilarityStrategy;
 import net.ricecode.similarity.StringSimilarityServiceImpl;
@@ -33,8 +34,7 @@ public class ChatEvent implements Listener {
             time.put(event.getPlayer(), System.currentTimeMillis());
             //similarity
             if (lastMessage.containsKey(event.getPlayer())) {
-                SimilarityStrategy strategy = new JaroWinklerStrategy();
-                if(new StringSimilarityServiceImpl(strategy).score(lastMessage.get(event.getPlayer()), event.getMessage()) >=0.80) {
+                if(new StringSimilarityServiceImpl(new JaroWinklerStrategy()).score(lastMessage.get(event.getPlayer()), event.getMessage()) >=0.90) {
                     event.setCancelled(true);
                     playerAPI.sendMessage(PlayerAPI.MessageType.ERROR, ChatMessageType.ACTION_BAR, ServerLibrary.prefix + "Deine Nachricht war zu ähnlich, zu deiner vorherigen Nachricht.");
                     return;
@@ -46,7 +46,7 @@ public class ChatEvent implements Listener {
             BadWords.badWords.forEach(word -> {
                 String[] splitMsg = finalMsg1.split("\\s+");
                 Arrays.stream(splitMsg).toList().forEach(msgWord -> {
-                    if(new StringSimilarityServiceImpl(new JaroWinklerStrategy()).score(word, msgWord) >= 0.80) {
+                    if(new StringSimilarityServiceImpl(new JaroWinklerStrategy()).score(word, msgWord) >= 0.85) {
                         event.setCancelled(true);
                         playerAPI.sendMessage(PlayerAPI.MessageType.ERROR, ChatMessageType.ACTION_BAR, ServerLibrary.prefix+"Bitte achte auf dein Chatverhalten (Wortwahl).");
                     }

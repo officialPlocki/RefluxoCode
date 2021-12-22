@@ -29,6 +29,7 @@ public class BadWords {
         badWords.add("pornhub");
         badWords.add("kacke");
         badWords.add("scheiße");
+        badWords.add("*");
         badWords.add("porn");
         badWords.add("beschissen");
         badWords.add("download server");
