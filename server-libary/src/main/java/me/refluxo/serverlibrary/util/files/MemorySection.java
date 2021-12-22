@@ -1,7 +1,5 @@
 package me.refluxo.serverlibrary.util.files;
 
-import org.apache.commons.lang.Validate;
-
 import java.util.*;
 
 public class MemorySection implements ConfigurationSection {
@@ -42,14 +40,14 @@ public class MemorySection implements ConfigurationSection {
      *     if parent contains no root Configuration.
      */
     protected MemorySection(ConfigurationSection parent, String path) {
-        Validate.notNull(parent, "Parent cannot be null");
-        Validate.notNull(path, "Path cannot be null");
+        Objects.requireNonNull(parent, "Parent cannot be null");
+        Objects.requireNonNull(path, "Path cannot be null");
 
         this.path = path;
         this.parent = parent;
         this.root = parent.getRoot();
 
-        Validate.notNull(root, "Path cannot be orphaned");
+        Objects.requireNonNull(root, "Path cannot be orphaned");
 
         this.fullPath = createPath(parent, path);
     }
@@ -120,7 +118,7 @@ public class MemorySection implements ConfigurationSection {
     }
 
     public void addDefault(String path, Object value) {
-        Validate.notNull(path, "Path cannot be null");
+        Objects.requireNonNull(path, "Path cannot be null");
 
         Configuration root = getRoot();
         if (root == null) {
@@ -146,7 +144,6 @@ public class MemorySection implements ConfigurationSection {
     }
 
     public void set(String path, Object value) {
-        Validate.notEmpty(path, "Cannot set to an empty path");
 
         Configuration root = getRoot();
         if (root == null) {
@@ -185,7 +182,7 @@ public class MemorySection implements ConfigurationSection {
     }
 
     public Object get(String path, Object def) {
-        Validate.notNull(path, "Path cannot be null");
+        Objects.requireNonNull(path, "Path cannot be null");
 
         if (path.length() == 0) {
             return this;
@@ -217,7 +214,9 @@ public class MemorySection implements ConfigurationSection {
     }
 
     public ConfigurationSection createSection(String path) {
-        Validate.notEmpty(path, "Cannot create section at empty path");
+        if(Objects.equals(path, "")) {
+            throw new IllegalArgumentException("Path cannot be empty");
+        }
         Configuration root = getRoot();
         if (root == null) {
             throw new IllegalStateException("Cannot create section without a root");
@@ -633,7 +632,7 @@ public class MemorySection implements ConfigurationSection {
     }
 
     protected Object getDefault(String path) {
-        Validate.notNull(path, "Path cannot be null");
+        Objects.requireNonNull(path, "Path cannot be null");
 
         Configuration root = getRoot();
         Configuration defaults = root == null ? null : root.getDefaults();
@@ -685,7 +684,7 @@ public class MemorySection implements ConfigurationSection {
     }
 
     public static String createPath(ConfigurationSection section, String key, ConfigurationSection relativeTo) {
-        Validate.notNull(section, "Cannot create path without a section");
+        Objects.requireNonNull(section, "Cannot create path without a section");
         Configuration root = section.getRoot();
         if (root == null) {
             throw new IllegalStateException("Cannot create path without a root");

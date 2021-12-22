@@ -14,15 +14,13 @@ public class FileConfigurationOptions extends MemoryConfigurationOptions {
     }
 
     @Override
-    public FileConfigurationOptions copyDefaults(boolean value) {
+    public void copyDefaults(boolean value) {
         super.copyDefaults(value);
-        return this;
     }
 
     @Override
-    public FileConfigurationOptions pathSeparator(char value) {
+    public void pathSeparator(char value) {
         super.pathSeparator(value);
-        return this;
     }
 
     /**
@@ -56,11 +54,9 @@ public class FileConfigurationOptions extends MemoryConfigurationOptions {
      * applied.
      *
      * @param value New header
-     * @return This object, for chaining
      */
-    public FileConfigurationOptions header(String value) {
+    public void header(String value) {
         this.header = value;
-        return this;
     }
 
     /**
@@ -100,11 +96,9 @@ public class FileConfigurationOptions extends MemoryConfigurationOptions {
      * Defaults to true.
      *
      * @param value Whether or not to copy the header
-     * @return This object, for chaining
      */
-    public FileConfigurationOptions copyHeader(boolean value) {
+    public void copyHeader(boolean value) {
         copyHeader = value;
 
-        return this;
     }
 }

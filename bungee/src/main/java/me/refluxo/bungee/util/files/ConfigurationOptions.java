@@ -17,17 +17,15 @@ public class ConfigurationOptions {
         return pathSeparator;
     }
 
-    public ConfigurationOptions pathSeparator(char value) {
+    public void pathSeparator(char value) {
         this.pathSeparator = value;
-        return this;
     }
 
     public boolean copyDefaults() {
         return copyDefaults;
     }
 
-    public ConfigurationOptions copyDefaults(boolean value) {
+    public void copyDefaults(boolean value) {
         this.copyDefaults = value;
-        return this;
     }
 }

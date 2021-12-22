@@ -2,12 +2,12 @@ package me.refluxo.serverlibrary.util.files;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
-import org.apache.commons.lang.Validate;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 public abstract class FileConfiguration extends MemoryConfiguration {
 
@@ -33,7 +33,7 @@ public abstract class FileConfiguration extends MemoryConfiguration {
 
     @SuppressWarnings("UnstableApiUsage")
     public void save(File file) throws IOException {
-        Validate.notNull(file, "File cannot be null");
+        Objects.requireNonNull(file, "File cannot be null");
 
         Files.createParentDirs(file);
 
@@ -45,7 +45,7 @@ public abstract class FileConfiguration extends MemoryConfiguration {
     }
     @SuppressWarnings("unused")
     public void save(String file) throws IOException {
-        Validate.notNull(file, "File cannot be null");
+        Objects.requireNonNull(file, "File cannot be null");
 
         save(new File(file));
     }
@@ -53,7 +53,7 @@ public abstract class FileConfiguration extends MemoryConfiguration {
     public abstract String saveToString();
 
     public void load(File file) throws Exception {
-        Validate.notNull(file, "File cannot be null");
+        Objects.requireNonNull(file, "File cannot be null");
 
         final FileInputStream stream = new FileInputStream(file);
 
@@ -62,7 +62,7 @@ public abstract class FileConfiguration extends MemoryConfiguration {
 
     @Deprecated
     public void load(InputStream stream) throws Exception {
-        Validate.notNull(stream, "Stream cannot be null");
+        Objects.requireNonNull(stream, "Stream cannot be null");
 
         load(new InputStreamReader(stream, UTF8_OVERRIDE ? Charsets.UTF_8 : Charset.defaultCharset()));
     }
@@ -88,7 +88,7 @@ public abstract class FileConfiguration extends MemoryConfiguration {
 
     @SuppressWarnings("unused")
     public void load(String file) throws Exception {
-        Validate.notNull(file, "File cannot be null");
+        Objects.requireNonNull(file, "File cannot be null");
 
         load(new File(file));
     }

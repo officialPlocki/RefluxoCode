@@ -13,7 +13,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="bungee" target="11" />
+      <module name="bungee" target="16" />
       <module name="RefluxoBot" target="17" />
       <module name="rpg-libary" target="1.8" />
       <module name="server-libary" target="16" />

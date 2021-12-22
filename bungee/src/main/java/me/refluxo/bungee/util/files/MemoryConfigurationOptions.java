@@ -11,14 +11,12 @@ public class MemoryConfigurationOptions extends ConfigurationOptions {
     }
 
     @Override
-    public MemoryConfigurationOptions copyDefaults(boolean value) {
+    public void copyDefaults(boolean value) {
         super.copyDefaults(value);
-        return this;
     }
 
     @Override
-    public MemoryConfigurationOptions pathSeparator(char value) {
+    public void pathSeparator(char value) {
         super.pathSeparator(value);
-        return this;
     }
 }

@@ -2,6 +2,7 @@ package me.refluxo.bungee.util.files;
 
 import java.util.Map;
 
+@SuppressWarnings("unused")
 public interface Configuration extends ConfigurationSection {
     void addDefault(String path, Object value);
 

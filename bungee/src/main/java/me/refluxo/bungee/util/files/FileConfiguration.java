@@ -2,21 +2,19 @@ package me.refluxo.bungee.util.files;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
-import org.apache.commons.lang3.Validate;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 public abstract class FileConfiguration extends MemoryConfiguration {
 
-    @Deprecated
     public static final boolean UTF8_OVERRIDE;
 
-    @Deprecated
     public static final boolean UTF_BIG;
 
-    @Deprecated
     public static final boolean SYSTEM_UTF;
     static {
         final byte[] testBytes = Base64Coder.decode("ICEiIyQlJicoKSorLC0uLzAxMjM0NTY3ODk6Ozw9Pj9AQUJDREVGR0hJSktMTU5PUFFSU1RVVldYWVpbXF1eX2BhYmNkZWZnaGlqa2xtbm9wcXJzdHV2d3h5ent8fX4NCg==");
@@ -24,7 +22,7 @@ public abstract class FileConfiguration extends MemoryConfiguration {
         final Charset defaultCharset = Charset.defaultCharset();
         final String resultString = new String(testBytes, defaultCharset);
         final boolean trueUTF = defaultCharset.name().contains("UTF");
-        UTF8_OVERRIDE = !testString.equals(resultString) || defaultCharset.equals(Charset.forName("US-ASCII"));
+        UTF8_OVERRIDE = !testString.equals(resultString) || defaultCharset.equals(StandardCharsets.US_ASCII);
         SYSTEM_UTF = trueUTF || UTF8_OVERRIDE;
         UTF_BIG = trueUTF && UTF8_OVERRIDE;
     }
@@ -33,32 +31,29 @@ public abstract class FileConfiguration extends MemoryConfiguration {
         super();
     }
 
+    @SuppressWarnings("UnstableApiUsage")
     public void save(File file) throws IOException {
-        Validate.notNull(file, "File cannot be null");
+        Objects.requireNonNull(file, "File cannot be null");
 
         Files.createParentDirs(file);
 
         String data = saveToString();
 
-        Writer writer = new OutputStreamWriter(new FileOutputStream(file), UTF8_OVERRIDE && !UTF_BIG ? Charsets.UTF_8 : Charset.defaultCharset());
-
-        try {
+        try (Writer writer = new OutputStreamWriter(new FileOutputStream(file), UTF8_OVERRIDE && !UTF_BIG ? Charsets.UTF_8 : Charset.defaultCharset())) {
             writer.write(data);
-        } finally {
-            writer.close();
         }
     }
-
+    @SuppressWarnings("unused")
     public void save(String file) throws IOException {
-        Validate.notNull(file, "File cannot be null");
+        Objects.requireNonNull(file, "File cannot be null");
 
         save(new File(file));
     }
 
     public abstract String saveToString();
 
-    public void load(File file) throws FileNotFoundException, Exception {
-        Validate.notNull(file, "File cannot be null");
+    public void load(File file) throws Exception {
+        Objects.requireNonNull(file, "File cannot be null");
 
         final FileInputStream stream = new FileInputStream(file);
 
@@ -67,7 +62,7 @@ public abstract class FileConfiguration extends MemoryConfiguration {
 
     @Deprecated
     public void load(InputStream stream) throws Exception {
-        Validate.notNull(stream, "Stream cannot be null");
+        Objects.requireNonNull(stream, "Stream cannot be null");
 
         load(new InputStreamReader(stream, UTF8_OVERRIDE ? Charsets.UTF_8 : Charset.defaultCharset()));
     }
@@ -91,8 +86,9 @@ public abstract class FileConfiguration extends MemoryConfiguration {
         loadFromString(builder.toString());
     }
 
+    @SuppressWarnings("unused")
     public void load(String file) throws Exception {
-        Validate.notNull(file, "File cannot be null");
+        Objects.requireNonNull(file, "File cannot be null");
 
         load(new File(file));
     }

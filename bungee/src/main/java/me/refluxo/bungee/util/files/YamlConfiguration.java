@@ -1,6 +1,5 @@
 package me.refluxo.bungee.util.files;
 
-import org.apache.commons.lang3.Validate;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.representer.Representer;
@@ -10,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.util.Map;
+import java.util.Objects;
 
 public class YamlConfiguration extends FileConfiguration {
     protected static final String COMMENT_PREFIX = "# ";
@@ -37,11 +37,11 @@ public class YamlConfiguration extends FileConfiguration {
 
     @Override
     public void loadFromString(String contents) {
-        Validate.notNull(contents, "Contents cannot be null");
+        Objects.requireNonNull(contents, "Contents cannot be null");
 
         Map<?, ?> input = null;
         try {
-            input = (Map<?, ?>) yaml.load(contents);
+            input = yaml.load(contents);
         } catch (Exception ignored) {}
 
         String header = parseHeader(contents);
@@ -103,9 +103,8 @@ public class YamlConfiguration extends FileConfiguration {
         if (options().copyHeader()) {
             Configuration def = getDefaults();
 
-            if ((def instanceof FileConfiguration)) {
-                FileConfiguration filedefaults = (FileConfiguration) def;
-                String defaultsHeader = filedefaults.buildHeader();
+            if ((def instanceof FileConfiguration fileDefaults)) {
+                String defaultsHeader = fileDefaults.buildHeader();
 
                 if ((defaultsHeader != null) && (defaultsHeader.length() > 0)) {
                     return defaultsHeader;
@@ -144,7 +143,7 @@ public class YamlConfiguration extends FileConfiguration {
     }
 
     public static YamlConfiguration loadConfiguration(File file) {
-        Validate.notNull(file, "File cannot be null");
+        Objects.requireNonNull(file, "File cannot be null");
 
         YamlConfiguration config = new YamlConfiguration();
 
@@ -159,7 +158,7 @@ public class YamlConfiguration extends FileConfiguration {
 
     @Deprecated
     public static YamlConfiguration loadConfiguration(InputStream stream) {
-        Validate.notNull(stream, "Stream cannot be null");
+        Objects.requireNonNull(stream, "Stream cannot be null");
 
         YamlConfiguration config = new YamlConfiguration();
 
@@ -172,8 +171,9 @@ public class YamlConfiguration extends FileConfiguration {
         return config;
     }
 
+    @SuppressWarnings("unused")
     public static YamlConfiguration loadConfiguration(Reader reader) throws Exception {
-        Validate.notNull(reader, "Stream cannot be null");
+        Objects.requireNonNull(reader, "Stream cannot be null");
 
         YamlConfiguration config = new YamlConfiguration();
 

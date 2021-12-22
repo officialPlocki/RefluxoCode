@@ -1,13 +1,12 @@
 package me.refluxo.serverlibrary.util.files;
 
-import org.apache.commons.lang.Validate;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -82,7 +81,7 @@ public class ConfigurationSerialization {
     }
 
     public ConfigurationSerializable deserialize(Map<String, ?> args) {
-        Validate.notNull(args, "Args must not be null");
+        Objects.requireNonNull(args, "Args must not be null");
 
         ConfigurationSerializable result = null;
         Method method;
