@@ -5,12 +5,8 @@ import me.refluxo.discord.bot.events.MessageEvent;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
-import net.dv8tion.jda.api.utils.Compression;
-import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 import javax.security.auth.login.LoginException;
-import java.util.Arrays;
-import java.util.Base64;
 
 public class RefluxoBot {
 

@@ -12,6 +12,7 @@ import me.refluxo.bungee.util.files.FileBuilder;
 import me.refluxo.bungee.util.files.YamlConfiguration;
 import me.refluxo.bungee.util.sql.MySQLService;
 import org.slf4j.Logger;
+import xyz.plocki.asyncthread.AsyncThread;
 
 import java.sql.SQLException;
 
@@ -52,6 +53,7 @@ public class Bungee {
     @Subscribe
     public void onDisable(ProxyShutdownEvent event) {
         MySQLService.disconnect();
+        AsyncThread.stopTasks();
     }
 
     @SuppressWarnings("unused")

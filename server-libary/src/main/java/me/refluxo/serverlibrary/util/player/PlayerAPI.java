@@ -2,6 +2,7 @@ package me.refluxo.serverlibrary.util.player;
 
 import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.ext.bridge.player.IPlayerManager;
+import me.refluxo.serverlibrary.ServerLibrary;
 import me.refluxo.serverlibrary.util.cloud.BungeeCord;
 import me.refluxo.serverlibrary.util.score.rank.Rank;
 import me.refluxo.serverlibrary.util.score.rank.RankManager;
@@ -66,7 +67,7 @@ public class PlayerAPI {
         } else if (type == MessageType.WARNING) {
             typemsg = "§e§lWARNUNG §8» §7";
         } else {
-            typemsg = "";
+            typemsg = ServerLibrary.prefix;
         }
         if (position.equals(ChatMessageType.ACTION_BAR)) {
             player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 10, 10);

@@ -2,6 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/GameHostController/GameHostController.iml" filepath="$PROJECT_DIR$/GameHostController/GameHostController.iml" />
+      <module fileurl="file://$PROJECT_DIR$/GameHostLobby/GameHostLobby.iml" filepath="$PROJECT_DIR$/GameHostLobby/GameHostLobby.iml" />
+      <module fileurl="file://$PROJECT_DIR$/GameHostServer/GameHostServer.iml" filepath="$PROJECT_DIR$/GameHostServer/GameHostServer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LobbySystem/LobbySystem.iml" filepath="$PROJECT_DIR$/LobbySystem/LobbySystem.iml" />
       <module fileurl="file://$PROJECT_DIR$/RefluxoBot/RefluxoBot.iml" filepath="$PROJECT_DIR$/RefluxoBot/RefluxoBot.iml" />
       <module fileurl="file://$PROJECT_DIR$/bungee/bungee.iml" filepath="$PROJECT_DIR$/bungee/bungee.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/code.iml" filepath="$PROJECT_DIR$/.idea/code.iml" />

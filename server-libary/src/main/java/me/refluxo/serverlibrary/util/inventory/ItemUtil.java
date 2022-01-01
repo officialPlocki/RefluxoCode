@@ -23,12 +23,18 @@ public class ItemUtil {
     public ItemUtil(final String displayName, ItemStack item, final String lore) {
         this.displayName = displayName;
         this.item = item;
+        if(!Objects.equals(lore, "")) {
+            this.lore.add("\n§eBeschreibung:\n\n\n");
+        }
         this.lore.add(lore);
     }
 
     public ItemUtil(final String displayName, final Material material, final String lore) {
         this.displayName = displayName;
         this.material = material;
+        if(!Objects.equals(lore, "")) {
+            this.lore.add("\n§eBeschreibung:\n\n\n");
+        }
         this.lore.add(lore);
     }
 

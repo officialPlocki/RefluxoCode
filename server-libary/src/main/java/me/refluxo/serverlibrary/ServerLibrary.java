@@ -1,8 +1,9 @@
 package me.refluxo.serverlibrary;
 
-import me.refluxo.serverlibrary.listeners.ChatEvent;
-import me.refluxo.serverlibrary.listeners.JoinEvent;
-import me.refluxo.serverlibrary.listeners.QuitEvent;
+import me.refluxo.serverlibrary.listeners.ChatListener;
+import me.refluxo.serverlibrary.listeners.CloudNetServiceConnectListener;
+import me.refluxo.serverlibrary.listeners.JoinListener;
+import me.refluxo.serverlibrary.listeners.QuitListener;
 import me.refluxo.serverlibrary.util.files.FileBuilder;
 import me.refluxo.serverlibrary.util.files.YamlConfiguration;
 import me.refluxo.serverlibrary.util.player.bad.BadWords;
@@ -23,8 +24,12 @@ public final class ServerLibrary extends JavaPlugin {
 
     public static String prefix = "§b§lRef§f§lluxo§c§l.me §8» §7";
 
+    public static String instanceName;
+
     @Override
     public void onEnable() {
+        Bukkit.getPluginManager().registerEvents(new CloudNetServiceConnectListener(), this);
+
         // Plugin startup logic
         PluginManager pm = Bukkit.getPluginManager();
         FileBuilder fb = new FileBuilder("config/libary/config.yml");
@@ -62,9 +67,9 @@ public final class ServerLibrary extends JavaPlugin {
 
         Bukkit.getConsoleSender().sendMessage("Commands registered. Trying to load listeners...");
         //listeners
-        pm.registerEvents(new JoinEvent(), this);
-        pm.registerEvents(new ChatEvent(), this);
-        pm.registerEvents(new QuitEvent(), this);
+        pm.registerEvents(new JoinListener(), this);
+        pm.registerEvents(new ChatListener(), this);
+        pm.registerEvents(new QuitListener(), this);
 
         Bukkit.getConsoleSender().sendMessage("Listeners loaded. Registering outgoing messaging channel...");
         Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
@@ -95,6 +100,7 @@ public final class ServerLibrary extends JavaPlugin {
 
         Bukkit.getConsoleSender().sendMessage("Disconnecting MySQL...");
         MySQLService.disconnect();
+        AsyncThread.stopTasks();
     }
 
     public static Plugin getPlugin() {

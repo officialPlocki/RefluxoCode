@@ -2,6 +2,7 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
@@ -9,14 +10,30 @@
         <module name="RefluxoBot" />
         <module name="rpg-libary" />
         <module name="bungee" />
+        <module name="LobbySystem" />
+        <module name="GameHostServer" />
+        <module name="GameHostController" />
         <module name="server-libary" />
+        <module name="GameHostLobby" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="bungee" target="16" />
+      <module name="game-host-common" target="1.8" />
+      <module name="game-host-controller" target="11" />
+      <module name="game-host-lobby" target="1.8" />
+      <module name="GameHost" target="1.5" />
+      <module name="GameHostController" target="11" />
+      <module name="GameHostLobby" target="1.8" />
+      <module name="GameHostServer" target="1.8" />
+      <module name="LobbySystem" target="1.8" />
       <module name="RefluxoBot" target="17" />
       <module name="rpg-libary" target="1.8" />
       <module name="server-libary" target="16" />
+      <module name="v-common" target="1.8" />
+      <module name="v-spigot" target="1.8" />
+      <module name="v-velocity" target="11" />
+      <module name="vSync" target="1.5" />
     </bytecodeTargetLevel>
   </component>
 </project>

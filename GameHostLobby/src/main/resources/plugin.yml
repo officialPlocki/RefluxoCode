@@ -1,0 +1,7 @@
+name: GameHostLobby
+version: '${project.version}'
+main: me.refluxo.gamehost.lobby.GameHostLobby
+api-version: 1.17
+load: STARTUP
+loadbefore: [ Library ]
+depend: [ Library ]

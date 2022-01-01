@@ -19,7 +19,17 @@
         <option value="$PROJECT_DIR$/server-libary/pom.xml" />
         <option value="$PROJECT_DIR$/bungee/pom.xml" />
         <option value="$PROJECT_DIR$/RefluxoBot/pom.xml" />
+        <option value="$PROJECT_DIR$/vSync/pom.xml" />
+        <option value="$PROJECT_DIR$/LobbySystem/pom.xml" />
+        <option value="$PROJECT_DIR$/GameHostLobby/pom.xml" />
+        <option value="$PROJECT_DIR$/GameHostServer/pom.xml" />
+        <option value="$PROJECT_DIR$/GameHostController/pom.xml" />
       </list>
+    </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/vSync/v-common/pom.xml" />
+      </set>
     </option>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="17" project-jdk-type="JavaSDK">

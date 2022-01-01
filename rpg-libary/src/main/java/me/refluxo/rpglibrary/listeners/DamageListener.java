@@ -41,6 +41,7 @@ public class DamageListener implements Listener {
     @EventHandler
     public void onDamage(EntityDamageEvent event) {
         if(!event.isCancelled()) {
+
             if(event.getEntity() instanceof Player) {
                 Player player = (Player) event.getEntity();
                 PlayerAPI playerAPI = new PlayerManager().getPlayer(player);
