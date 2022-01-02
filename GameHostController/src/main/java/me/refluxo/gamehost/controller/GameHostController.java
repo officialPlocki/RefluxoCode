@@ -5,6 +5,7 @@ import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.proxy.ProxyServer;
+import me.refluxo.gamehost.controller.util.GameHostControl;
 import org.slf4j.Logger;
 
 @Plugin(
@@ -21,6 +22,7 @@ public class GameHostController {
     public GameHostController(ProxyServer server, Logger logger) {
         GameHostController.server = server;
         GameHostController.logger = logger;
+        GameHostControl.init();
     }
 
     @Subscribe

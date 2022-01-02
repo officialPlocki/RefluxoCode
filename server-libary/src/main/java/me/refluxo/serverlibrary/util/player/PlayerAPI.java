@@ -6,6 +6,7 @@ import me.refluxo.serverlibrary.ServerLibrary;
 import me.refluxo.serverlibrary.util.cloud.BungeeCord;
 import me.refluxo.serverlibrary.util.score.rank.Rank;
 import me.refluxo.serverlibrary.util.score.rank.RankManager;
+import me.refluxo.serverlibrary.util.sql.CoinsAPI;
 import me.refluxo.serverlibrary.util.sql.MySQLService;
 import me.refluxo.serverlibrary.util.sql.log.MySQLLog;
 import net.md_5.bungee.api.ChatMessageType;
@@ -56,6 +57,29 @@ public class PlayerAPI {
 
     public void log(String messageToLog) {
         new MySQLLog().log(player, messageToLog);
+    }
+
+    public void resetCoins() {
+        setCoins(0);
+    }
+
+    public void setCoins(int coins) {
+        new CoinsAPI(player).setCoins(coins);
+    }
+
+    public void removeCoins(int coins) {
+        new CoinsAPI(player).removeCoins(coins);
+    }
+
+    public void addCoins(int coins) {
+        new CoinsAPI(player).addCoins(coins);
+    }
+
+    public boolean hasCoins(int coins) {
+        if(getAPIPlayer().getCoins() >= coins) {
+            return true;
+        }
+        return false;
     }
 
     public void sendMessage(MessageType type, ChatMessageType position, String msg) {
@@ -160,6 +184,11 @@ public class PlayerAPI {
             @Override
             public Player getBukkitPlayer() {
                 return player;
+            }
+
+            @Override
+            public int getCoins() {
+                return new CoinsAPI(player).getCoins();
             }
         };
     }

@@ -24,4 +24,6 @@ public interface APIPlayer {
 
     Player getBukkitPlayer();
 
+    int getCoins();
+
 }

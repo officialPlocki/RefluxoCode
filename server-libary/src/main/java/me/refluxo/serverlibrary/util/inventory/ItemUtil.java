@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@SuppressWarnings("unused")
 public class ItemUtil {
     private final String displayName;
     private Material material;
@@ -23,18 +22,12 @@ public class ItemUtil {
     public ItemUtil(final String displayName, ItemStack item, final String lore) {
         this.displayName = displayName;
         this.item = item;
-        if(!Objects.equals(lore, "")) {
-            this.lore.add("\n§eBeschreibung:\n\n\n");
-        }
         this.lore.add(lore);
     }
 
     public ItemUtil(final String displayName, final Material material, final String lore) {
         this.displayName = displayName;
         this.material = material;
-        if(!Objects.equals(lore, "")) {
-            this.lore.add("\n§eBeschreibung:\n\n\n");
-        }
         this.lore.add(lore);
     }
 
@@ -60,19 +53,6 @@ public class ItemUtil {
             itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         }
         itemstack.setItemMeta(itemMeta);
-        itemstack.setAmount(amount);
-        return itemstack;
-    }
-
-    @SuppressWarnings("deprecation")
-    public ItemStack buildSkull(final String skullOwner) {
-        final ItemStack itemstack = new ItemStack(Material.PLAYER_HEAD, 1);
-        final SkullMeta skullMeta = (SkullMeta)itemstack.getItemMeta();
-        assert skullMeta != null;
-        skullMeta.setDisplayName(displayName);
-        skullMeta.setOwner(skullOwner);
-        skullMeta.setLore(lore);
-        itemstack.setItemMeta(skullMeta);
         itemstack.setAmount(amount);
         return itemstack;
     }

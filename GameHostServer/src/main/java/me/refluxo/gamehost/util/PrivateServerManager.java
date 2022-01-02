@@ -1,4 +1,4 @@
-package me.refluxo.gamehost.lobby.util;
+package me.refluxo.gamehost.util;
 
 import de.dytanic.cloudnet.driver.CloudNetDriver;
 import de.dytanic.cloudnet.driver.service.ServiceInfoSnapshot;
@@ -21,7 +21,6 @@ public class PrivateServerManager {
 
     public void createInstance() {
         GameInstance instance = new GameInstance("ps", new PrivateServerMySQL(playerAPI.getAPIPlayer().getBukkitPlayer()).getInstanceUUID(), 1024);
-        instance.addOwnerUUID(playerAPI.getAPIPlayer().getUUID());
         instance.startInstance();
         ServiceInfoSnapshot snapshot = instance.getInstance();
         new PrivateServerMySQL(playerAPI.getAPIPlayer().getBukkitPlayer()).setInstanceName(snapshot.getName());

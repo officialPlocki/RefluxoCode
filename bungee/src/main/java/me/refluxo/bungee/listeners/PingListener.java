@@ -12,7 +12,7 @@ import java.util.EventListener;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class PingEvent implements EventListener {
+public class PingListener implements EventListener {
 
     @Subscribe
     public void onPing(ProxyPingEvent event) {

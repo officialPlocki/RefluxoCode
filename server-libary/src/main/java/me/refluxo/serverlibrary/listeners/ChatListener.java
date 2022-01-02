@@ -11,6 +11,7 @@ import net.ricecode.similarity.SimilarityStrategy;
 import net.ricecode.similarity.StringSimilarityServiceImpl;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import xyz.plocki.asyncthread.AsyncThread;
@@ -25,9 +26,12 @@ public class ChatListener implements Listener {
     private static final Map<Player, Long> time = new HashMap<>();
     private static final Map<Player, String> lastMessage = new HashMap<>();
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onChat(AsyncPlayerChatEvent event) {
         //anti spam
+        if(event.isCancelled()) {
+            return;
+        }
         String msg = event.getMessage();
         PlayerAPI playerAPI = new PlayerManager().getPlayer(event.getPlayer());
         if(!((System.currentTimeMillis() - time.getOrDefault(event.getPlayer(), System.currentTimeMillis()-5000)) < 3000)) {
@@ -46,7 +50,7 @@ public class ChatListener implements Listener {
             BadWords.badWords.forEach(word -> {
                 String[] splitMsg = finalMsg1.split("\\s+");
                 Arrays.stream(splitMsg).toList().forEach(msgWord -> {
-                    if(new StringSimilarityServiceImpl(new JaroWinklerStrategy()).score(word, msgWord) >= 0.85) {
+                    if(new StringSimilarityServiceImpl(new JaroWinklerStrategy()).score(word, msgWord) >= 0.95) {
                         event.setCancelled(true);
                         playerAPI.sendMessage(PlayerAPI.MessageType.ERROR, ChatMessageType.ACTION_BAR, "Bitte achte auf dein Chatverhalten (Wortwahl).");
                     }

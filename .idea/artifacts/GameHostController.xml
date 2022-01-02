@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="GameHostController">
+    <output-path>$PROJECT_DIR$/out/artifacts/GameHostController</output-path>
+    <root id="archive" name="GameHostController.jar">
+      <element id="module-output" name="GameHostController" />
+    </root>
+  </artifact>
+</component>

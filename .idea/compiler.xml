@@ -23,7 +23,7 @@
       <module name="game-host-controller" target="11" />
       <module name="game-host-lobby" target="1.8" />
       <module name="GameHost" target="1.5" />
-      <module name="GameHostController" target="11" />
+      <module name="GameHostController" target="16" />
       <module name="GameHostLobby" target="1.8" />
       <module name="GameHostServer" target="1.8" />
       <module name="LobbySystem" target="1.8" />

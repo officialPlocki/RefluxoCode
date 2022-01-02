@@ -7,7 +7,7 @@ import me.refluxo.bungee.util.OnlineTime;
 import java.sql.SQLException;
 import java.util.EventListener;
 
-public class JoinEvent implements EventListener {
+public class JoinListener implements EventListener {
 
     @Subscribe
     public void onJoin(LoginEvent event) {

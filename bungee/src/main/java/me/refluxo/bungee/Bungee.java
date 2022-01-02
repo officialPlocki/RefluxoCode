@@ -5,8 +5,8 @@ import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.proxy.ProxyServer;
-import me.refluxo.bungee.listeners.JoinEvent;
-import me.refluxo.bungee.listeners.PingEvent;
+import me.refluxo.bungee.listeners.JoinListener;
+import me.refluxo.bungee.listeners.PingListener;
 import me.refluxo.bungee.util.OnlineTime;
 import me.refluxo.bungee.util.files.FileBuilder;
 import me.refluxo.bungee.util.files.YamlConfiguration;
@@ -45,8 +45,8 @@ public class Bungee {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        server.getEventManager().register(this, new JoinEvent());
-        server.getEventManager().register(this, new PingEvent());
+        server.getEventManager().register(this, new JoinListener());
+        server.getEventManager().register(this, new PingListener());
         OnlineTime.init();
     }
 
