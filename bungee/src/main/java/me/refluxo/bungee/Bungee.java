@@ -1,35 +1,21 @@
 package me.refluxo.bungee;
 
-import com.google.inject.Inject;
-import com.velocitypowered.api.event.Subscribe;
-import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
-import com.velocitypowered.api.plugin.Plugin;
-import com.velocitypowered.api.proxy.ProxyServer;
-import me.refluxo.bungee.listeners.JoinListener;
-import me.refluxo.bungee.listeners.PingListener;
-import me.refluxo.bungee.util.OnlineTime;
 import me.refluxo.bungee.util.files.FileBuilder;
 import me.refluxo.bungee.util.files.YamlConfiguration;
 import me.refluxo.bungee.util.sql.MySQLService;
-import org.slf4j.Logger;
+import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.plugin.Plugin;
 import xyz.plocki.asyncthread.AsyncThread;
 
 import java.sql.SQLException;
 
-@Plugin(
-        id = "bungee",
-        name = "Bungee",
-        version = "1.0-SNAPSHOT"
-)
-public class Bungee {
+public class Bungee extends Plugin {
 
-    private static Logger logger = null;
     private static ProxyServer server = null;
 
-    @Inject
-    public Bungee(ProxyServer server, Logger logger) {
-        Bungee.server = server;
-        Bungee.logger = logger;
+    @Override
+    public void onEnable() {
+        server = ProxyServer.getInstance();
         FileBuilder fb = new FileBuilder("config/libary/config.yml");
         YamlConfiguration yml = fb.getYaml();
         if(!fb.getFile().exists()) {
@@ -45,25 +31,14 @@ public class Bungee {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        server.getEventManager().register(this, new JoinListener());
-        server.getEventManager().register(this, new PingListener());
-        OnlineTime.init();
     }
 
-    @Subscribe
-    public void onDisable(ProxyShutdownEvent event) {
+    @Override
+    public void onDisable() {
         MySQLService.disconnect();
         AsyncThread.stopTasks();
     }
 
-    @SuppressWarnings("unused")
-    public static Logger getLogger() { return logger; }
-
     public static ProxyServer getProxyServer() { return server; }
-
-    @SuppressWarnings("unused")
-    public static ProxyServer getInstance() {
-        return server;
-    }
 
 }

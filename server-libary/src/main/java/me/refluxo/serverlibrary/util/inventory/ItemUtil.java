@@ -8,6 +8,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -19,16 +20,16 @@ public class ItemUtil {
     private int amount = 1;
     boolean enchanted = false;
 
-    public ItemUtil(final String displayName, ItemStack item, final String lore) {
+    public ItemUtil(final String displayName, ItemStack item, final String... lore) {
         this.displayName = displayName;
         this.item = item;
-        this.lore.add(lore);
+        this.lore.addAll(Arrays.asList(lore));
     }
 
-    public ItemUtil(final String displayName, final Material material, final String lore) {
+    public ItemUtil(final String displayName, final Material material, final String... lore) {
         this.displayName = displayName;
         this.material = material;
-        this.lore.add(lore);
+        this.lore.addAll(Arrays.asList(lore));
     }
 
     public ItemUtil setAmount(int count) {
@@ -42,8 +43,7 @@ public class ItemUtil {
     }
 
     public ItemStack buildItem() {
-        ItemStack itemstack;
-        itemstack = Objects.requireNonNullElseGet(item, () -> new ItemStack(this.material));
+        ItemStack itemstack = Objects.requireNonNullElseGet(item, () -> new ItemStack(this.material));
         final ItemMeta itemMeta = itemstack.getItemMeta();
         assert itemMeta != null;
         itemMeta.setDisplayName(displayName);

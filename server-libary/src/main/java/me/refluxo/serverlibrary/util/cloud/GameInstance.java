@@ -39,7 +39,7 @@ public class GameInstance {
         snapshot = ServiceConfiguration.builder()
                 .task(ident+uuid)
                 .node(CloudNetDriver.getInstance().getNodeUniqueId())
-                .autoDeleteOnStop(false)
+                .autoDeleteOnStop(true)
                 .staticService(true)
                 .templates(defaultTemplate, saveTemplate)
                 .maxHeapMemory(memory)

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="EntryPointsManager">
-    <list size="3">
+    <list size="4">
       <item index="0" class="java.lang.String" itemvalue="org.bukkit.event.EventHandler" />
       <item index="1" class="java.lang.String" itemvalue="com.velocitypowered.api.event.Subscribe" />
       <item index="2" class="java.lang.String" itemvalue="com.velocitypowered.api.plugin.Plugin" />
+      <item index="3" class="java.lang.String" itemvalue="net.md_5.bungee.event.EventHandler" />
     </list>
   </component>
   <component name="IntelliCalc">
@@ -23,7 +24,6 @@
         <option value="$PROJECT_DIR$/LobbySystem/pom.xml" />
         <option value="$PROJECT_DIR$/GameHostLobby/pom.xml" />
         <option value="$PROJECT_DIR$/GameHostServer/pom.xml" />
-        <option value="$PROJECT_DIR$/GameHostController/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
@@ -32,7 +32,7 @@
       </set>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_16" default="true" project-jdk-name="16" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_16" default="true" project-jdk-name="temurin-16" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>

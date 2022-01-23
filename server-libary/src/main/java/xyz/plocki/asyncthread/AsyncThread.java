@@ -1,5 +1,8 @@
 package xyz.plocki.asyncthread;
 
+import me.refluxo.serverlibrary.ServerLibrary;
+import org.bukkit.Bukkit;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -12,30 +15,29 @@ public class AsyncThread {
 
     public static ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(20000);
     private final Runnable runnable;
-    private static final List<ScheduledFuture<?>> tasks = new ArrayList<>();
+    private static final List<Integer> tasks = new ArrayList<>();
 
     public AsyncThread(Runnable runnable) {
         this.runnable = runnable;
     }
 
     public void runAsync() {
-        scheduler.schedule(this.runnable, 1L, TimeUnit.MILLISECONDS);
-        Thread thread = new Thread(this.runnable);
+        new Thread(this.runnable).run();
     }
 
     public void runAsyncTaskLater(long seconds) {
-        scheduler.schedule(this.runnable, seconds, TimeUnit.SECONDS);
+        Bukkit.getScheduler().runTaskLater(ServerLibrary.getPlugin(), runnable, seconds*20);
     }
 
-    public ScheduledFuture<?> scheduleAsyncTask(long initDelay, long seconds) {
-        ScheduledFuture<?> future = scheduler.scheduleAtFixedRate(this.runnable, initDelay, seconds, TimeUnit.SECONDS);
-        tasks.add(future);
-        return future;
+    public int scheduleAsyncTask(long initDelay, long seconds) {
+        int t = Bukkit.getScheduler().scheduleSyncRepeatingTask(ServerLibrary.getPlugin(), runnable, initDelay, seconds*20);
+        tasks.add(t);
+        return t;
     }
 
     public static void stopTasks() {
-        tasks.forEach(scheduledFuture -> {
-            scheduledFuture.cancel(true);
+        tasks.forEach(task -> {
+            Bukkit.getScheduler().cancelTask(task);
         });
         tasks.clear();
     }

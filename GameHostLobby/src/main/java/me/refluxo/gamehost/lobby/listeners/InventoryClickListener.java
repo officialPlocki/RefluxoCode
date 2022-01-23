@@ -7,6 +7,7 @@ import de.dytanic.cloudnet.driver.service.ServiceTemplate;
 import me.refluxo.gamehost.lobby.util.PrivateServerConfigurationMySQL;
 import me.refluxo.gamehost.lobby.util.PrivateServerManager;
 import me.refluxo.gamehost.lobby.util.PrivateServerMySQL;
+import me.refluxo.serverlibrary.ServerLibrary;
 import me.refluxo.serverlibrary.util.cloud.BungeeCord;
 import me.refluxo.serverlibrary.util.inventory.ItemUtil;
 import me.refluxo.serverlibrary.util.player.PlayerAPI;
@@ -64,14 +65,14 @@ public class InventoryClickListener implements Listener {
             } else {
                 new PlayerManager().getPlayer(event.getPlayer()).sendMessage(PlayerAPI.MessageType.ERROR, ChatMessageType.CHAT, "Dieser Spieler hat keinen Server!");
                 Inventory inventory = Bukkit.createInventory(null, 6*9, "§a§lSmaragd-Paket Serverliste");
-                ItemStack pane = new ItemUtil("", Material.BLACK_STAINED_GLASS_PANE, "").buildItem();
+                ItemStack pane = new ItemUtil("§f", Material.BLACK_STAINED_GLASS_PANE, "").buildItem();
                 for(int i = 0; i < inventory.getSize(); i++) {
                     inventory.setItem(i, pane);
                 }
                 List<ServiceInfoSnapshot> snapshots = new PrivateServerManager(new PlayerManager().getPlayer(event.getPlayer())).getAllInstances();
                 for(int i = 0; i < (inventory.getSize()-9); i++) {
                     if(snapshots.get(i) != null) {
-                        inventory.setItem(i, new ItemUtil(snapshots.get(i).getName(), Material.GREEN_STAINED_GLASS_PANE, "\n§f\"" + new PrivateServerConfigurationMySQL(getInstanceUUID(snapshots.get(i).getName())).getMOTD() + "\"\n\n§aDieser Server gehört: §b" + getPlayerNameFromUUID(getInstanceOwnerUUID(getInstanceUUID(snapshots.get(i).getName()))) + "\n").buildItem());
+                        inventory.setItem(i, new ItemUtil(snapshots.get(i).getName(), Material.GREEN_STAINED_GLASS_PANE, "", "§f\"" + new PrivateServerConfigurationMySQL(getInstanceUUID(snapshots.get(i).getName())).getMOTD() + "\"", "", "§aDieser Server gehört: §b" + getPlayerNameFromUUID(getInstanceOwnerUUID(getInstanceUUID(snapshots.get(i).getName()))) + "", "").buildItem());
                     }
                 }
                 event.getPlayer().openInventory(inventory);
@@ -85,6 +86,7 @@ public class InventoryClickListener implements Listener {
             event.setCancelled(true);
             String title = event.getView().getTitle();
             ItemStack item = event.getCurrentItem();
+            ItemStack pane = new ItemUtil("§f", Material.BLACK_STAINED_GLASS_PANE, "").buildItem();
             String displayName = Objects.requireNonNull(item.getItemMeta()).getDisplayName();
             PlayerAPI playerAPI = new PlayerManager().getPlayer((Player) event.getWhoClicked());
             PrivateServerMySQL server = new PrivateServerMySQL(playerAPI.getAPIPlayer().getBukkitPlayer());
@@ -96,10 +98,43 @@ public class InventoryClickListener implements Listener {
                     ServiceTemplate template = new ServiceTemplate("ps", new PrivateServerMySQL(((Player) event.getWhoClicked())).getInstanceUUID(), "saves");
                     template.storage().delete();
                     template.storage().create();
-                    new AsyncThread(() -> playerAPI.getAPIPlayer().getBukkitPlayer().openInventory(Objects.requireNonNull(getInventory(inventoryType.CHOOSE, playerAPI.getAPIPlayer().getBukkitPlayer())))).runAsyncTaskLater(1);
+                    Inventory inventory4 = Bukkit.createInventory(null, 5*9, "§dWas möchtest du Spielen?");
+                    for(int i = 0; i < inventory4.getSize(); i++) {
+                        inventory4.setItem(i, pane);
+                    }
+                    inventory4.setItem(11, new ItemUtil("§a§lVorlagen", Material.PAPER, "", "§bWähle einen Server aus Vorlagen aus und passe ihn\n", "nach deinen Wünschen an.\n", "").buildItem());
+                    inventory4.setItem(15, new ItemUtil("§b§lCustom", Material.CHEST, "", "§bErstelle deinen eigenen Server, ganz ohne Vorlagen.\n", "").buildItem());
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(ServerLibrary.getPlugin(), () -> event.getWhoClicked().openInventory(inventory4), 3);
                 } else if(displayName.equalsIgnoreCase("§c§lNein")) {
-                    playerAPI.getAPIPlayer().getBukkitPlayer().closeInventory();
-                    new AsyncThread(() -> playerAPI.getAPIPlayer().getBukkitPlayer().openInventory(Objects.requireNonNull(getInventory(inventoryType.SETTINGS, playerAPI.getAPIPlayer().getBukkitPlayer())))).runAsyncTaskLater(1);
+                    event.getWhoClicked().closeInventory();
+                    Inventory inventory2 = Bukkit.createInventory(null, 6*9, "§6§lEinstellungen");
+                    for(int i = 0; i < inventory2.getSize(); i++) {
+                        inventory2.setItem(i, pane);
+                    }
+                    inventory2.setItem(20, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                    inventory2.setItem(21, new ItemUtil("§6§lMOTD", Material.BOOK, "", "§aÄndere die MOTD\n", "", "Aktuelle MOTD: " + new PrivateServerConfigurationMySQL(new PrivateServerMySQL((Player) event.getWhoClicked()).getInstanceUUID()).getMOTD() + "", "").buildItem());
+                    String string;
+                    boolean maintenance = new PrivateServerConfigurationMySQL(new PrivateServerMySQL((Player) event.getWhoClicked()).getInstanceUUID()).isInMaintenance();
+                    if(maintenance) {
+                        string = "§a§lJa";
+                    } else {
+                        string = "§c§lNein";
+                    }
+                    inventory2.setItem(22, new ItemUtil("§c§lWartungen", Material.REPEATER, "", "§aSetze den Server in den Wartungsmodus\n", "", "§bAktiviert: §e" + string).buildItem());
+                    inventory2.setItem(23, new ItemUtil("§b§lHosting Pakete", Material.BEACON, "", "§aMiete ein Hosting Paket von Coins\n", "").buildItem());
+                    inventory2.setItem(24, new ItemUtil("§c", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                    inventory2.setItem(29, new ItemUtil("§c", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                    inventory2.setItem(30, new ItemUtil("§c", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                    inventory2.setItem(31, new ItemUtil("§c", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                    inventory2.setItem(32, new ItemUtil("§c", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                    inventory2.setItem(33, new ItemUtil("§c", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                    if(new PrivateServerMySQL((Player) event.getWhoClicked()).isInstanceOnline()) {
+                        inventory2.setItem(53, new ItemUtil("§c§lServer Stoppen", Material.RED_DYE, "").buildItem());
+                        inventory2.setItem(8, new ItemUtil("§b§lVerbinden", Material.ENDER_PEARL, "").buildItem());
+                    } else {
+                        inventory2.setItem(53, new ItemUtil("§a§lServer Starten", Material.LIME_DYE, "").buildItem());
+                    }
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(ServerLibrary.getPlugin(), () -> event.getWhoClicked().openInventory(inventory2), 3);
                 }
             } else if(title.equalsIgnoreCase("§b§lHosting Pakete")) {
                 if(displayName.equalsIgnoreCase("§a§l4096mb")) {
@@ -108,8 +143,35 @@ public class InventoryClickListener implements Listener {
                         configuration.resetPackageTime();
                         playerAPI.removeCoins(80);
                         playerAPI.sendMessage(PlayerAPI.MessageType.NORMAL, ChatMessageType.CHAT, "Du hast das Smaragd Hosting Paket für 24h Serverlaufzeit gebucht.");
-                        playerAPI.getAPIPlayer().getBukkitPlayer().closeInventory();
-                        new AsyncThread(() -> playerAPI.getAPIPlayer().getBukkitPlayer().openInventory(Objects.requireNonNull(getInventory(inventoryType.SETTINGS, playerAPI.getAPIPlayer().getBukkitPlayer())))).runAsyncTaskLater(1);
+                        event.getWhoClicked().closeInventory();
+                        Inventory inventory2 = Bukkit.createInventory(null, 6*9, "§6§lEinstellungen");
+                        for(int i = 0; i < inventory2.getSize(); i++) {
+                            inventory2.setItem(i, pane);
+                        }
+                        inventory2.setItem(20, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                        inventory2.setItem(21, new ItemUtil("§6§lMOTD", Material.BOOK, "", "§aÄndere die MOTD\n", "", "Aktuelle MOTD: " + new PrivateServerConfigurationMySQL(new PrivateServerMySQL((Player) event.getWhoClicked()).getInstanceUUID()).getMOTD() + "", "").buildItem());
+                        String string;
+                        boolean maintenance = new PrivateServerConfigurationMySQL(new PrivateServerMySQL((Player) event.getWhoClicked()).getInstanceUUID()).isInMaintenance();
+                        if(maintenance) {
+                            string = "§a§lJa";
+                        } else {
+                            string = "§c§lNein";
+                        }
+                        inventory2.setItem(22, new ItemUtil("§c§lWartungen", Material.REPEATER, "", "§aSetze den Server in den Wartungsmodus\n", "", "§bAktiviert: §e" + string).buildItem());
+                        inventory2.setItem(23, new ItemUtil("§b§lHosting Pakete", Material.BEACON, "", "§aMiete ein Hosting Paket von Coins\n", "").buildItem());
+                        inventory2.setItem(24, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                        inventory2.setItem(29, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                        inventory2.setItem(30, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                        inventory2.setItem(31, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                        inventory2.setItem(32, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                        inventory2.setItem(33, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                        if(new PrivateServerMySQL((Player) event.getWhoClicked()).isInstanceOnline()) {
+                            inventory2.setItem(53, new ItemUtil("§c§lServer Stoppen", Material.RED_DYE, "").buildItem());
+                            inventory2.setItem(8, new ItemUtil("§b§lVerbinden", Material.ENDER_PEARL, "").buildItem());
+                        } else {
+                            inventory2.setItem(53, new ItemUtil("§a§lServer Starten", Material.LIME_DYE, "").buildItem());
+                        }
+                        Bukkit.getScheduler().scheduleSyncDelayedTask(ServerLibrary.getPlugin(), () -> event.getWhoClicked().openInventory(inventory2), 3);
                     } else {
                         playerAPI.sendMessage(PlayerAPI.MessageType.ERROR, ChatMessageType.CHAT, "Du hast nicht genügend Coins.");
                     }
@@ -119,8 +181,35 @@ public class InventoryClickListener implements Listener {
                         configuration.resetPackageTime();
                         playerAPI.removeCoins(60);
                         playerAPI.sendMessage(PlayerAPI.MessageType.NORMAL, ChatMessageType.CHAT, "Du hast das Diamant Hosting Paket für 24h Serverlaufzeit gebucht.");
-                        playerAPI.getAPIPlayer().getBukkitPlayer().closeInventory();
-                        new AsyncThread(() -> playerAPI.getAPIPlayer().getBukkitPlayer().openInventory(Objects.requireNonNull(getInventory(inventoryType.SETTINGS, playerAPI.getAPIPlayer().getBukkitPlayer())))).runAsyncTaskLater(1);
+                        event.getWhoClicked().closeInventory();
+                        Inventory inventory2 = Bukkit.createInventory(null, 6*9, "§6§lEinstellungen");
+                        for(int i = 0; i < inventory2.getSize(); i++) {
+                            inventory2.setItem(i, pane);
+                        }
+                        inventory2.setItem(20, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                        inventory2.setItem(21, new ItemUtil("§6§lMOTD", Material.BOOK, "", "§aÄndere die MOTD\n", "", "Aktuelle MOTD: " + new PrivateServerConfigurationMySQL(new PrivateServerMySQL((Player) event.getWhoClicked()).getInstanceUUID()).getMOTD() + "", "").buildItem());
+                        String string;
+                        boolean maintenance = new PrivateServerConfigurationMySQL(new PrivateServerMySQL((Player) event.getWhoClicked()).getInstanceUUID()).isInMaintenance();
+                        if(maintenance) {
+                            string = "§a§lJa";
+                        } else {
+                            string = "§c§lNein";
+                        }
+                        inventory2.setItem(22, new ItemUtil("§c§lWartungen", Material.REPEATER, "", "§aSetze den Server in den Wartungsmodus\n", "", "§bAktiviert: §e" + string).buildItem());
+                        inventory2.setItem(23, new ItemUtil("§b§lHosting Pakete", Material.BEACON, "", "§aMiete ein Hosting Paket von Coins\n", "").buildItem());
+                        inventory2.setItem(24, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                        inventory2.setItem(29, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                        inventory2.setItem(30, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                        inventory2.setItem(31, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                        inventory2.setItem(32, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                        inventory2.setItem(33, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                        if(new PrivateServerMySQL((Player) event.getWhoClicked()).isInstanceOnline()) {
+                            inventory2.setItem(53, new ItemUtil("§c§lServer Stoppen", Material.RED_DYE, "").buildItem());
+                            inventory2.setItem(8, new ItemUtil("§b§lVerbinden", Material.ENDER_PEARL, "").buildItem());
+                        } else {
+                            inventory2.setItem(53, new ItemUtil("§a§lServer Starten", Material.LIME_DYE, "").buildItem());
+                        }
+                        Bukkit.getScheduler().scheduleSyncDelayedTask(ServerLibrary.getPlugin(), () -> event.getWhoClicked().openInventory(inventory2), 3);
                     } else {
                         playerAPI.sendMessage(PlayerAPI.MessageType.ERROR, ChatMessageType.CHAT, "Du hast nicht genügend Coins.");
                     }
@@ -130,8 +219,35 @@ public class InventoryClickListener implements Listener {
                         configuration.resetPackageTime();
                         playerAPI.removeCoins(40);
                         playerAPI.sendMessage(PlayerAPI.MessageType.NORMAL, ChatMessageType.CHAT, "Du hast das Gold Hosting Paket für 24h Serverlaufzeit gebucht.");
-                        playerAPI.getAPIPlayer().getBukkitPlayer().closeInventory();
-                        new AsyncThread(() -> playerAPI.getAPIPlayer().getBukkitPlayer().openInventory(Objects.requireNonNull(getInventory(inventoryType.SETTINGS, playerAPI.getAPIPlayer().getBukkitPlayer())))).runAsyncTaskLater(1);
+                        event.getWhoClicked().closeInventory();
+                        Inventory inventory2 = Bukkit.createInventory(null, 6*9, "§6§lEinstellungen");
+                        for(int i = 0; i < inventory2.getSize(); i++) {
+                            inventory2.setItem(i, pane);
+                        }
+                        inventory2.setItem(20, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                        inventory2.setItem(21, new ItemUtil("§6§lMOTD", Material.BOOK, "", "§aÄndere die MOTD\n", "", "Aktuelle MOTD: " + new PrivateServerConfigurationMySQL(new PrivateServerMySQL((Player) event.getWhoClicked()).getInstanceUUID()).getMOTD() + "", "").buildItem());
+                        String string;
+                        boolean maintenance = new PrivateServerConfigurationMySQL(new PrivateServerMySQL((Player) event.getWhoClicked()).getInstanceUUID()).isInMaintenance();
+                        if(maintenance) {
+                            string = "§a§lJa";
+                        } else {
+                            string = "§c§lNein";
+                        }
+                        inventory2.setItem(22, new ItemUtil("§c§lWartungen", Material.REPEATER, "", "§aSetze den Server in den Wartungsmodus\n", "", "§bAktiviert: §e" + string).buildItem());
+                        inventory2.setItem(23, new ItemUtil("§b§lHosting Pakete", Material.BEACON, "", "§aMiete ein Hosting Paket von Coins\n", "").buildItem());
+                        inventory2.setItem(24, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                        inventory2.setItem(29, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                        inventory2.setItem(30, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                        inventory2.setItem(31, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                        inventory2.setItem(32, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                        inventory2.setItem(33, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                        if(new PrivateServerMySQL((Player) event.getWhoClicked()).isInstanceOnline()) {
+                            inventory2.setItem(53, new ItemUtil("§c§lServer Stoppen", Material.RED_DYE, "").buildItem());
+                            inventory2.setItem(8, new ItemUtil("§b§lVerbinden", Material.ENDER_PEARL, "").buildItem());
+                        } else {
+                            inventory2.setItem(53, new ItemUtil("§a§lServer Starten", Material.LIME_DYE, "").buildItem());
+                        }
+                        Bukkit.getScheduler().scheduleSyncDelayedTask(ServerLibrary.getPlugin(), () -> event.getWhoClicked().openInventory(inventory2), 3);
                     } else {
                         playerAPI.sendMessage(PlayerAPI.MessageType.ERROR, ChatMessageType.CHAT, "Du hast nicht genügend Coins.");
                     }
@@ -141,8 +257,35 @@ public class InventoryClickListener implements Listener {
                         configuration.resetPackageTime();
                         playerAPI.removeCoins(30);
                         playerAPI.sendMessage(PlayerAPI.MessageType.NORMAL, ChatMessageType.CHAT, "Du hast das Eisen Hosting Paket für 24h Serverlaufzeit gebucht.");
-                        playerAPI.getAPIPlayer().getBukkitPlayer().closeInventory();
-                        new AsyncThread(() -> playerAPI.getAPIPlayer().getBukkitPlayer().openInventory(Objects.requireNonNull(getInventory(inventoryType.SETTINGS, playerAPI.getAPIPlayer().getBukkitPlayer())))).runAsyncTaskLater(1);
+                        event.getWhoClicked().closeInventory();
+                        Inventory inventory2 = Bukkit.createInventory(null, 6*9, "§6§lEinstellungen");
+                        for(int i = 0; i < inventory2.getSize(); i++) {
+                            inventory2.setItem(i, pane);
+                        }
+                        inventory2.setItem(20, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                        inventory2.setItem(21, new ItemUtil("§6§lMOTD", Material.BOOK, "", "§aÄndere die MOTD\n", "", "Aktuelle MOTD: " + new PrivateServerConfigurationMySQL(new PrivateServerMySQL((Player) event.getWhoClicked()).getInstanceUUID()).getMOTD() + "", "").buildItem());
+                        String string;
+                        boolean maintenance = new PrivateServerConfigurationMySQL(new PrivateServerMySQL((Player) event.getWhoClicked()).getInstanceUUID()).isInMaintenance();
+                        if(maintenance) {
+                            string = "§a§lJa";
+                        } else {
+                            string = "§c§lNein";
+                        }
+                        inventory2.setItem(22, new ItemUtil("§c§lWartungen", Material.REPEATER, "", "§aSetze den Server in den Wartungsmodus\n", "", "§bAktiviert: §e" + string).buildItem());
+                        inventory2.setItem(23, new ItemUtil("§b§lHosting Pakete", Material.BEACON, "", "§aMiete ein Hosting Paket von Coins\n", "").buildItem());
+                        inventory2.setItem(24, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                        inventory2.setItem(29, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                        inventory2.setItem(30, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                        inventory2.setItem(31, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                        inventory2.setItem(32, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                        inventory2.setItem(33, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                        if(new PrivateServerMySQL((Player) event.getWhoClicked()).isInstanceOnline()) {
+                            inventory2.setItem(53, new ItemUtil("§c§lServer Stoppen", Material.RED_DYE, "").buildItem());
+                            inventory2.setItem(8, new ItemUtil("§b§lVerbinden", Material.ENDER_PEARL, "").buildItem());
+                        } else {
+                            inventory2.setItem(53, new ItemUtil("§a§lServer Starten", Material.LIME_DYE, "").buildItem());
+                        }
+                        Bukkit.getScheduler().scheduleSyncDelayedTask(ServerLibrary.getPlugin(), () -> event.getWhoClicked().openInventory(inventory2), 3);
                     } else {
                         playerAPI.sendMessage(PlayerAPI.MessageType.ERROR, ChatMessageType.CHAT, "Du hast nicht genügend Coins.");
                     }
@@ -152,14 +295,42 @@ public class InventoryClickListener implements Listener {
                         configuration.resetPackageTime();
                         playerAPI.removeCoins(20);
                         playerAPI.sendMessage(PlayerAPI.MessageType.NORMAL, ChatMessageType.CHAT, "Du hast das Bronze Hosting Paket für 24h Serverlaufzeit gebucht.");
-                        playerAPI.getAPIPlayer().getBukkitPlayer().closeInventory();
-                        new AsyncThread(() -> playerAPI.getAPIPlayer().getBukkitPlayer().openInventory(Objects.requireNonNull(getInventory(inventoryType.SETTINGS, playerAPI.getAPIPlayer().getBukkitPlayer())))).runAsyncTaskLater(1);
+                        event.getWhoClicked().closeInventory();
+                        Inventory inventory2 = Bukkit.createInventory(null, 6*9, "§6§lEinstellungen");
+                        for(int i = 0; i < inventory2.getSize(); i++) {
+                            inventory2.setItem(i, pane);
+                        }
+                        inventory2.setItem(20, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                        inventory2.setItem(21, new ItemUtil("§6§lMOTD", Material.BOOK, "", "§aÄndere die MOTD\n", "", "Aktuelle MOTD: " + new PrivateServerConfigurationMySQL(new PrivateServerMySQL((Player) event.getWhoClicked()).getInstanceUUID()).getMOTD() + "", "").buildItem());
+                        String string;
+                        boolean maintenance = new PrivateServerConfigurationMySQL(new PrivateServerMySQL((Player) event.getWhoClicked()).getInstanceUUID()).isInMaintenance();
+                        if(maintenance) {
+                            string = "§a§lJa";
+                        } else {
+                            string = "§c§lNein";
+                        }
+                        inventory2.setItem(22, new ItemUtil("§c§lWartungen", Material.REPEATER, "", "§aSetze den Server in den Wartungsmodus\n", "", "§bAktiviert: §e" + string).buildItem());
+                        inventory2.setItem(23, new ItemUtil("§b§lHosting Pakete", Material.BEACON, "", "§aMiete ein Hosting Paket von Coins\n", "").buildItem());
+                        inventory2.setItem(24, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                        inventory2.setItem(29, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                        inventory2.setItem(30, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                        inventory2.setItem(31, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                        inventory2.setItem(32, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                        inventory2.setItem(33, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                        if(new PrivateServerMySQL((Player) event.getWhoClicked()).isInstanceOnline()) {
+                            inventory2.setItem(53, new ItemUtil("§c§lServer Stoppen", Material.RED_DYE, "").buildItem());
+                            inventory2.setItem(8, new ItemUtil("§b§lVerbinden", Material.ENDER_PEARL, "").buildItem());
+                        } else {
+                            inventory2.setItem(53, new ItemUtil("§a§lServer Starten", Material.LIME_DYE, "").buildItem());
+                        }
+                        Bukkit.getScheduler().scheduleSyncDelayedTask(ServerLibrary.getPlugin(), () -> event.getWhoClicked().openInventory(inventory2), 3);
                     } else {
                         playerAPI.sendMessage(PlayerAPI.MessageType.ERROR, ChatMessageType.CHAT, "Du hast nicht genügend Coins.");
                     }
                 }
             } else if(title.equalsIgnoreCase("§6§lEinstellungen")) {
                 if(displayName.equalsIgnoreCase("§6§lMOTD")) {
+                    event.getWhoClicked().closeInventory();
                     motdSet.put((Player) event.getWhoClicked(), true);
                     playerAPI.sendMessage(PlayerAPI.MessageType.NORMAL, ChatMessageType.CHAT, "Schreibe jetzt die MOTD in den Chat, die du setzen möchtest. Verwende \"&\" zum verwenden von Farben.");
                 } else if(displayName.equalsIgnoreCase("§c§lWartungen")) {
@@ -171,125 +342,107 @@ public class InventoryClickListener implements Listener {
                         playerAPI.sendMessage(PlayerAPI.MessageType.WARNING, ChatMessageType.CHAT, "Die Wartungsarbeiten wurden aktiviert.");
                     }
                 } else if(displayName.equalsIgnoreCase("§b§lHosting Pakete")) {
-                    playerAPI.getAPIPlayer().getBukkitPlayer().closeInventory();
-                    new AsyncThread(() -> playerAPI.getAPIPlayer().getBukkitPlayer().openInventory(Objects.requireNonNull(getInventory(inventoryType.PACKAGES, playerAPI.getAPIPlayer().getBukkitPlayer())))).runAsyncTaskLater(1);
+                    event.getWhoClicked().closeInventory();
+                    Inventory inventory = Bukkit.createInventory(null, 5*9, "§b§lHosting Pakete");
+                    for(int i = 0; i < inventory.getSize(); i++) {
+                        inventory.setItem(i, pane);
+                    }
+                    inventory.setItem(13, new ItemUtil("§a§l4096mb", Material.EMERALD, "", "", "§6Kosten: §b80 Coins /Tag\n", "", "§cDieses Paket läuft nach 24h Serverlaufzeit ab.\n", "").buildItem());
+                    inventory.setItem(20, new ItemUtil("§6§l2048mb", Material.GOLD_INGOT, "", "", "§6Kosten: §b40 Coins /Tag\n", "", "§cDieses Paket läuft nach 24h Serverlaufzeit ab.\n", "").buildItem());
+                    inventory.setItem(24, new ItemUtil("§b§l3072mb", Material.DIAMOND, "", "", "§6Kosten: §b60 Coins /Tag\n", "", "§cDieses Paket läuft nach 24h Serverlaufzeit ab.\n", "").buildItem());
+                    inventory.setItem(28, new ItemUtil("§7§l768mb", Material.COAL, "", "", "§6Kosten: §b0 Coins /Tag\n", "", "§cDieses Paket wird automatisch nach ablauf\n", "des gemieteten Paketes verwendet.\n", "").buildItem());
+                    inventory.setItem(31, new ItemUtil("§f§l1536mb", Material.IRON_INGOT, "", "", "§6Kosten: §b30 Coins /Tag\n", "", "§cDieses Paket läuft nach 24h Serverlaufzeit ab.\n", "").buildItem());
+                    inventory.setItem(34, new ItemUtil("§7§l1024mb", Material.BRICK, "", "", "§6Kosten: §b20 Coins /Tag\n", "", "§cDieses Paket läuft nach 24h Serverlaufzeit ab.\n", "").buildItem());
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(ServerLibrary.getPlugin(), () -> event.getWhoClicked().openInventory(inventory), 3);
                 } else if(displayName.equalsIgnoreCase("§c§lServer Stoppen")) {
                     PrivateServerManager manager = new PrivateServerManager(playerAPI);
                     manager.stopInstance();
+                    event.getWhoClicked().closeInventory();
                     playerAPI.sendMessage(PlayerAPI.MessageType.NORMAL, ChatMessageType.CHAT, "Dein Server wurde heruntergefahren.");
                 } else if(displayName.equalsIgnoreCase("§b§lVerbinden")) {
-                    new BungeeCord().sendPlayer(playerAPI.getAPIPlayer().getName(), new PrivateServerMySQL(playerAPI.getAPIPlayer().getBukkitPlayer()).getInstanceName());
+                    event.getWhoClicked().closeInventory();
+                    new BungeeCord().sendPlayer(playerAPI.getAPIPlayer().getName(), new PrivateServerMySQL((Player) event.getWhoClicked()).getInstanceName());
                 } else if(displayName.equalsIgnoreCase("§a§lServer Starten")) {
                     PrivateServerManager manager = new PrivateServerManager(playerAPI);
                     manager.createInstance();
-                    new AsyncThread(() -> new BungeeCord().sendPlayer(playerAPI.getAPIPlayer().getName(), new PrivateServerMySQL(playerAPI.getAPIPlayer().getBukkitPlayer()).getInstanceName())).runAsyncTaskLater(5);
+                    playerAPI.sendMessage(PlayerAPI.MessageType.NORMAL, ChatMessageType.CHAT, "Dein Server wird gestartet. Bitte warten...");
+                    event.getWhoClicked().closeInventory();
+                    new AsyncThread(() -> new BungeeCord().sendPlayer(playerAPI.getAPIPlayer().getName(), new PrivateServerMySQL((Player) event.getWhoClicked()).getInstanceName())).runAsyncTaskLater(25);
                 }
             } else if(title.equalsIgnoreCase("§a§lVorlagen")) {
                 if(displayName.equalsIgnoreCase("§cZurück")) {
-                    playerAPI.getAPIPlayer().getBukkitPlayer().closeInventory();
-                    new AsyncThread(() -> playerAPI.getAPIPlayer().getBukkitPlayer().openInventory(Objects.requireNonNull(getInventory(inventoryType.CHOOSE, playerAPI.getAPIPlayer().getBukkitPlayer())))).runAsyncTaskLater(1);
+                    event.getWhoClicked().closeInventory();
+                    Inventory inventory4 = Bukkit.createInventory(null, 5*9, "§dWas möchtest du Spielen?");
+                    for(int i = 0; i < inventory4.getSize(); i++) {
+                        inventory4.setItem(i, pane);
+                    }
+                    inventory4.setItem(11, new ItemUtil("§a§lVorlagen", Material.PAPER, "", "§bWähle einen Server aus Vorlagen aus und passe ihn\n", "nach deinen Wünschen an.\n", "").buildItem());
+                    inventory4.setItem(15, new ItemUtil("§b§lCustom", Material.CHEST, "", "§bErstelle deinen eigenen Server, ganz ohne Vorlagen.\n", "").buildItem());
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(ServerLibrary.getPlugin(), () -> event.getWhoClicked().openInventory(inventory4), 3);
                 }
             } else if(title.equalsIgnoreCase("§b§lServerliste")) {
                 if(displayName.equalsIgnoreCase("§bServer Suchen (Spieler Name)")) {
-                    playerAPI.getAPIPlayer().getBukkitPlayer().closeInventory();
+                    event.getWhoClicked().closeInventory();
                     playerAPI.sendMessage(PlayerAPI.MessageType.NORMAL, ChatMessageType.CHAT, "Bitte schreibe nun den Namen vom Spieler in den Chat.");
-                    search.put(playerAPI.getAPIPlayer().getBukkitPlayer(), true);
-                    motdSet.put(playerAPI.getAPIPlayer().getBukkitPlayer(), false);
+                    search.put((Player) event.getWhoClicked(), true);
+                    motdSet.put((Player) event.getWhoClicked(), false);
                 } else if(displayName.equalsIgnoreCase("§a§lServerliste")) {
+                    event.getWhoClicked().closeInventory();
                     Inventory inventory = Bukkit.createInventory(null, 6*9, "§a§lSmaragd-Paket Serverliste");
-                    ItemStack pane = new ItemUtil("", Material.BLACK_STAINED_GLASS_PANE, "").buildItem();
                     for(int i = 0; i < inventory.getSize(); i++) {
                         inventory.setItem(i, pane);
                     }
                     List<ServiceInfoSnapshot> snapshots = new PrivateServerManager(playerAPI).getAllInstances();
                     for(int i = 0; i < (inventory.getSize()-9); i++) {
                         if(snapshots.get(i) != null) {
-                            inventory.setItem(i, new ItemUtil(snapshots.get(i).getName(), Material.GREEN_STAINED_GLASS_PANE, "\n§f\"" + new PrivateServerConfigurationMySQL(getInstanceUUID(snapshots.get(i).getName())).getMOTD() + "\"\n\n§aDieser Server gehört: §b" + getPlayerNameFromUUID(getInstanceOwnerUUID(getInstanceUUID(snapshots.get(i).getName()))) + "\n").buildItem());
+                            inventory.setItem(i, new ItemUtil(snapshots.get(i).getName(), Material.GREEN_STAINED_GLASS_PANE, "", "§f\"" + new PrivateServerConfigurationMySQL(getInstanceUUID(snapshots.get(i).getName())).getMOTD() + "\"", "", "§aDieser Server gehört: §b" + getPlayerNameFromUUID(getInstanceOwnerUUID(getInstanceUUID(snapshots.get(i).getName()))) + "", "").buildItem());
                         }
                     }
-                    playerAPI.getAPIPlayer().getBukkitPlayer().openInventory(inventory);
+                    new AsyncThread(() -> event.getWhoClicked().openInventory(inventory));
                 }
             } else if(title.equalsIgnoreCase("§dWas möchtest du Spielen?")) {
                 if(displayName.equalsIgnoreCase("§a§lVorlagen")) {
-                    playerAPI.getAPIPlayer().getBukkitPlayer().closeInventory();
-                    new AsyncThread(() -> playerAPI.getAPIPlayer().getBukkitPlayer().openInventory(getInventory(inventoryType.CHOOSE, playerAPI.getAPIPlayer().getBukkitPlayer()))).runAsyncTaskLater(1);
+                    event.getWhoClicked().closeInventory();
+                    //add template getter method
+                    Inventory inventory3 = Bukkit.createInventory(null, 5*9, "§a§lVorlagen");
+                    for(int i = 0; i < inventory3.getSize(); i++) {
+                        inventory3.setItem(i, pane);
+                    }
+                    inventory3.setItem(0, new ItemUtil("§cZurück", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(ServerLibrary.getPlugin(), () -> event.getWhoClicked().openInventory(inventory3), 3);
                 } else if(displayName.equalsIgnoreCase("§b§lCustom")) {
-                    playerAPI.getAPIPlayer().getBukkitPlayer().closeInventory();
-                    new AsyncThread(() -> playerAPI.getAPIPlayer().getBukkitPlayer().openInventory(getInventory(inventoryType.SETTINGS, playerAPI.getAPIPlayer().getBukkitPlayer()))).runAsyncTaskLater(1);
+                    event.getWhoClicked().closeInventory();
+                    Inventory inventory2 = Bukkit.createInventory(null, 6*9, "§6§lEinstellungen");
+                    for(int i = 0; i < inventory2.getSize(); i++) {
+                        inventory2.setItem(i, pane);
+                    }
+                    inventory2.setItem(20, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                    inventory2.setItem(21, new ItemUtil("§6§lMOTD", Material.BOOK, "", "§aÄndere die MOTD\n", "", "Aktuelle MOTD: " + new PrivateServerConfigurationMySQL(new PrivateServerMySQL((Player) event.getWhoClicked()).getInstanceUUID()).getMOTD() + "", "").buildItem());
+                    String string;
+                    boolean maintenance = new PrivateServerConfigurationMySQL(new PrivateServerMySQL((Player) event.getWhoClicked()).getInstanceUUID()).isInMaintenance();
+                    if(maintenance) {
+                        string = "§a§lJa";
+                    } else {
+                        string = "§c§lNein";
+                    }
+                    inventory2.setItem(22, new ItemUtil("§c§lWartungen", Material.REPEATER, "", "§aSetze den Server in den Wartungsmodus\n", "", "§bAktiviert: §e" + string).buildItem());
+                    inventory2.setItem(23, new ItemUtil("§b§lHosting Pakete", Material.BEACON, "", "§aMiete ein Hosting Paket von Coins\n", "").buildItem());
+                    inventory2.setItem(24, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                    inventory2.setItem(29, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                    inventory2.setItem(30, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                    inventory2.setItem(31, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                    inventory2.setItem(32, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                    inventory2.setItem(33, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
+                    if(new PrivateServerMySQL((Player) event.getWhoClicked()).isInstanceOnline()) {
+                        inventory2.setItem(53, new ItemUtil("§c§lServer Stoppen", Material.RED_DYE, "").buildItem());
+                        inventory2.setItem(8, new ItemUtil("§b§lVerbinden", Material.ENDER_PEARL, "").buildItem());
+                    } else {
+                        inventory2.setItem(53, new ItemUtil("§a§lServer Starten", Material.LIME_DYE, "").buildItem());
+                    }
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(ServerLibrary.getPlugin(), () -> event.getWhoClicked().openInventory(inventory2), 3);
                 }
             }
         }
-    }
-
-    public static Inventory getInventory(inventoryType type, Player player) {
-        switch (type) {
-            case PACKAGES:
-                Inventory inventory = Bukkit.createInventory(null, 5*9, "§b§lHosting Pakete");
-                ItemStack pane = new ItemUtil("", Material.BLACK_STAINED_GLASS_PANE, "").buildItem();
-                for(int i = 0; i < inventory.getSize(); i++) {
-                    inventory.setItem(i, pane);
-                }
-                inventory.setItem(13, new ItemUtil("§a§l4096mb", Material.EMERALD, "\n\n§6Kosten: §b80 Coins /Tag\n\n§cDieses Paket läuft nach 24h Serverlaufzeit ab.\n").buildItem());
-                inventory.setItem(20, new ItemUtil("§6§l2048mb", Material.GOLD_INGOT, "\n\n§6Kosten: §b40 Coins /Tag\n\n§cDieses Paket läuft nach 24h Serverlaufzeit ab.\n").buildItem());
-                inventory.setItem(24, new ItemUtil("§b§l3072mb", Material.DIAMOND, "\n\n§6Kosten: §b60 Coins /Tag\n\n§cDieses Paket läuft nach 24h Serverlaufzeit ab.\n").buildItem());
-                inventory.setItem(28, new ItemUtil("§7§l768mb", Material.COAL, "\n\n§6Kosten: §b0 Coins /Tag\n\n§cDieses Paket wird automatisch nach ablauf\ndes gemieteten Paketes verwendet.\n").buildItem());
-                inventory.setItem(31, new ItemUtil("§f§l1536mb", Material.IRON_INGOT, "\n\n§6Kosten: §b30 Coins /Tag\n\n§cDieses Paket läuft nach 24h Serverlaufzeit ab.\n").buildItem());
-                inventory.setItem(34, new ItemUtil("§7§l1024mb", Material.BRICK, "\n\n§6Kosten: §b20 Coins /Tag\n\n§cDieses Paket läuft nach 24h Serverlaufzeit ab.\n").buildItem());
-                return inventory;
-            case SETTINGS:
-                Inventory inventory2 = Bukkit.createInventory(null, 6*9, "§6§lEinstellungen");
-                ItemStack pane2 = new ItemUtil("", Material.BLACK_STAINED_GLASS_PANE, "").buildItem();
-                for(int i = 0; i < inventory2.getSize(); i++) {
-                    inventory2.setItem(i, pane2);
-                }
-                inventory2.setItem(20, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
-                inventory2.setItem(21, new ItemUtil("§6§lMOTD", Material.BOOK, "\n§aÄndere die MOTD\n\nAktuelle MOTD: " + new PrivateServerConfigurationMySQL(new PrivateServerMySQL(player).getInstanceUUID()).getMOTD() + "\n").buildItem());
-                String string;
-                boolean maintenance = new PrivateServerConfigurationMySQL(new PrivateServerMySQL(player).getInstanceUUID()).isInMaintenance();
-                if(maintenance) {
-                    string = "§a§lJa";
-                } else {
-                    string = "§c§lNein";
-                }
-                inventory2.setItem(22, new ItemUtil("§c§lWartungen", Material.REPEATER, "\n§aSetze den Server in den Wartungsmodus\n\n§bAktiviert: §e" + string).buildItem());
-                inventory2.setItem(23, new ItemUtil("§b§lHosting Pakete", Material.BEACON, "\n§aMiete ein Hosting Paket von Coins\n").buildItem());
-                inventory2.setItem(24, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
-                inventory2.setItem(29, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
-                inventory2.setItem(30, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
-                inventory2.setItem(31, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
-                inventory2.setItem(32, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
-                inventory2.setItem(33, new ItemUtil("", Material.RED_STAINED_GLASS_PANE, "").buildItem());
-                if(new PrivateServerMySQL(player).isInstanceOnline()) {
-                    inventory2.setItem(53, new ItemUtil("§c§lServer Stoppen", Material.RED_DYE, "").buildItem());
-                    inventory2.setItem(8, new ItemUtil("§b§lVerbinden", Material.ENDER_PEARL, "").buildItem());
-                } else {
-                    inventory2.setItem(53, new ItemUtil("§a§lServer Starten", Material.LIME_DYE, "").buildItem());
-                }
-                return inventory2;
-            case TEMPLATES:
-                //add template getter method
-                Inventory inventory3 = Bukkit.createInventory(null, 5*9, "§a§lVorlagen");
-                ItemStack pane3 = new ItemUtil("", Material.BLACK_STAINED_GLASS_PANE, "").buildItem();
-                for(int i = 0; i < inventory3.getSize(); i++) {
-                    inventory3.setItem(i, pane3);
-                }
-                inventory3.setItem(0, new ItemUtil("§cZurück", Material.RED_STAINED_GLASS_PANE, "").buildItem());
-                return inventory3;
-            case CHOOSE:
-                Inventory inventory4 = Bukkit.createInventory(null, 5*9, "§dWas möchtest du Spielen?");
-                ItemStack pane4 = new ItemUtil("", Material.BLACK_STAINED_GLASS_PANE, "").buildItem();
-                for(int i = 0; i < inventory4.getSize(); i++) {
-                    inventory4.setItem(i, pane4);
-                }
-                inventory4.setItem(11, new ItemUtil("§a§lVorlagen", Material.PAPER, "\n§bWähle einen Server aus Vorlagen aus und passe ihn\nnach deinen Wünschen an.\n").buildItem());
-                inventory4.setItem(15, new ItemUtil("§b§lCustom", Material.CHEST, "\n§bErstelle deinen eigenen Server, ganz ohne Vorlagen.\n").buildItem());
-                return inventory4;
-        }
-        return null;
-    }
-
-    public enum inventoryType {
-        SETTINGS, TEMPLATES, PACKAGES, CHOOSE
     }
 
     private static String getPlayerUUIDFromName(String name) throws IOException {

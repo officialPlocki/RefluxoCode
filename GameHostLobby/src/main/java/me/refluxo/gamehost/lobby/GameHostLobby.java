@@ -6,20 +6,24 @@ import me.refluxo.gamehost.lobby.listeners.InventoryClickListener;
 import me.refluxo.gamehost.lobby.util.PrivateServerConfigurationMySQL;
 import me.refluxo.gamehost.lobby.util.PrivateServerMySQL;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Objects;
 
 public final class GameHostLobby extends JavaPlugin {
 
+    public static Plugin instance;
+
     @Override
     public void onEnable() {
+        instance = this;
         // Plugin startup logic
         PrivateServerConfigurationMySQL.init();
         PrivateServerMySQL.init();
         Bukkit.getPluginManager().registerEvents(new InventoryClickListener(), this);
-        Objects.requireNonNull(this.getCommand("ps")).setExecutor(new PrivateServerCommand());
-        Objects.requireNonNull(this.getCommand("pslist")).setExecutor(new PrivateServerListCommand());
+        this.getCommand("ps").setExecutor(new PrivateServerCommand());
+        this.getCommand("pslist").setExecutor(new PrivateServerListCommand());
     }
 
     @Override

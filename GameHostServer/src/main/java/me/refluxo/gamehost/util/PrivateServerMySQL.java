@@ -1,6 +1,7 @@
 package me.refluxo.gamehost.util;
 
 import me.refluxo.serverlibrary.util.sql.MySQLService;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.sql.ResultSet;

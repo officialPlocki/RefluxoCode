@@ -1,41 +1,37 @@
 package xyz.plocki.asyncthread;
 
+import me.refluxo.bungee.Bungee;
+import net.md_5.bungee.api.scheduler.ScheduledTask;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 public class AsyncThread {
 
-    public static ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(20000);
     private final Runnable runnable;
-    private static final List<ScheduledFuture<?>> tasks = new ArrayList<>();
+    private static final List<ScheduledTask> tasks = new ArrayList<>();
 
     public AsyncThread(Runnable runnable) {
         this.runnable = runnable;
     }
 
     public void runAsync() {
-        scheduler.schedule(this.runnable, 1L, TimeUnit.MILLISECONDS);
-        Thread thread = new Thread(this.runnable);
+        new Thread(this.runnable).run();
     }
 
     public void runAsyncTaskLater(long seconds) {
-        scheduler.schedule(this.runnable, seconds, TimeUnit.SECONDS);
+        Bungee.getProxyServer().getScheduler().schedule(Bungee.getProxyServer().getPluginManager().getPlugin("Bungee"), runnable, seconds, TimeUnit.SECONDS);
     }
 
-    public ScheduledFuture<?> scheduleAsyncTask(long initDelay, long seconds) {
-        ScheduledFuture<?> future = scheduler.scheduleAtFixedRate(this.runnable, initDelay, seconds, TimeUnit.SECONDS);
-        tasks.add(future);
-        return future;
+    public ScheduledTask scheduleAsyncTask(long initDelay, long seconds) {
+        ScheduledTask task = Bungee.getProxyServer().getScheduler().schedule(Bungee.getProxyServer().getPluginManager().getPlugin("Bungee"), runnable, initDelay, seconds, TimeUnit.SECONDS);
+        tasks.add(task);
+        return task;
     }
 
     public static void stopTasks() {
-        tasks.forEach(scheduledFuture -> {
-            scheduledFuture.cancel(true);
-        });
+        tasks.forEach(ScheduledTask::cancel);
         tasks.clear();
     }
 

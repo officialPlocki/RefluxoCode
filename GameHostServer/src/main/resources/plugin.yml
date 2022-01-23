@@ -5,3 +5,5 @@ api-version: 1.17
 load: STARTUP
 loadbefore: [ Library ]
 depend: [ Library ]
+commands:
+  ps:

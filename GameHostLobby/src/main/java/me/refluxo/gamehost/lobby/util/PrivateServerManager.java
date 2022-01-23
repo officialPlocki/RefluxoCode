@@ -20,11 +20,10 @@ public class PrivateServerManager {
     }
 
     public void createInstance() {
-        GameInstance instance = new GameInstance("ps", new PrivateServerMySQL(playerAPI.getAPIPlayer().getBukkitPlayer()).getInstanceUUID(), 1024);
+        GameInstance instance = new GameInstance("ps", new PrivateServerMySQL(playerAPI.getAPIPlayer().getBukkitPlayer()).getInstanceUUID(), new PrivateServerConfigurationMySQL(new PrivateServerMySQL(playerAPI.getAPIPlayer().getBukkitPlayer()).getInstanceUUID()).getRAM());
         instance.addOwnerUUID(playerAPI.getAPIPlayer().getUUID());
         instance.startInstance();
-        ServiceInfoSnapshot snapshot = instance.getInstance();
-        new PrivateServerMySQL(playerAPI.getAPIPlayer().getBukkitPlayer()).setInstanceName(snapshot.getName());
+        new PrivateServerMySQL(playerAPI.getAPIPlayer().getBukkitPlayer()).setInstanceName("ps" + new PrivateServerMySQL(playerAPI.getAPIPlayer().getBukkitPlayer()).getInstanceUUID() + "-1");
         new PrivateServerMySQL(playerAPI.getAPIPlayer().getBukkitPlayer()).setInstanceOnline(true);
     }
 

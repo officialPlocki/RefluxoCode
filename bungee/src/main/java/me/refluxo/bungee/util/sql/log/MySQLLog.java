@@ -1,10 +1,10 @@
 package me.refluxo.bungee.util.sql.log;
 
-import com.velocitypowered.api.proxy.Player;
 import me.refluxo.bungee.util.sql.MySQLService;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class MySQLLog {
-    public void log(Player player, String log) {
+    public void log(ProxiedPlayer player, String log) {
         (new MySQLService()).executeUpdate("INSERT INTO log(i,log,t) VALUES ('player." + player.getUniqueId().toString() + "','" + log + "','" + System.currentTimeMillis() + "')");
     }
 

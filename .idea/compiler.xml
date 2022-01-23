@@ -12,7 +12,6 @@
         <module name="bungee" />
         <module name="LobbySystem" />
         <module name="GameHostServer" />
-        <module name="GameHostController" />
         <module name="server-libary" />
         <module name="GameHostLobby" />
       </profile>
@@ -25,10 +24,10 @@
       <module name="GameHost" target="1.5" />
       <module name="GameHostController" target="16" />
       <module name="GameHostLobby" target="1.8" />
-      <module name="GameHostServer" target="1.8" />
+      <module name="GameHostServer" target="9" />
       <module name="LobbySystem" target="1.8" />
       <module name="RefluxoBot" target="17" />
-      <module name="rpg-libary" target="1.8" />
+      <module name="rpg-libary" target="16" />
       <module name="server-libary" target="16" />
       <module name="v-common" target="1.8" />
       <module name="v-spigot" target="1.8" />

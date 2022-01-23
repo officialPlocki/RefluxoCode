@@ -8,3 +8,6 @@ loadbefore:
   - Library
 depend:
   - Library
+commands:
+  ps:
+  pslist:
